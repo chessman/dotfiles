@@ -1,0 +1,18 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.Xresources: Xresources
+    ~/.inputrc: inputrc
+    ~/.emacs.d/init.el: init.el
+    ~/.vimrc: vimrc
+    ~/.config/i3/config: i3.conf
+    ~/.config/i3status/config: i3status.conf
+
+- shell:
+  - cd ~/.vim/bundle/Vundle.vim || git clone https://github.com/VundleVim/Vundle.vim.git
+  - mkdir -p ~/.config/i3/lock-images
