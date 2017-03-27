@@ -45,6 +45,10 @@
 (setq-default fill-column 100)
 (auto-fill-mode)
 
+;(setq compilation-read-command nil)
+(setq compilation-scroll-output 'first-error)
+(global-set-key "\C-x\C-m" 'compile)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup
 
@@ -117,6 +121,7 @@
   (setq helm-echo-input-in-header-line t
         helm-display-header-line nil
         helm-always-two-windows t
+        ;helm-follow-mode-persistent t
         helm-M-x-fuzzy-match t)
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
   (evil-leader/set-key
@@ -127,9 +132,34 @@
  (interactive)
  (helm-do-ag (projectile-project-root)))
 
+(defun helm-do-ag-this-dir-insert-at-point ()
+  (interactive)
+  (let ((helm-ag-insert-at-point 'symbol))
+    (helm-do-ag-this-dir)))
+
+;; from spacemacs
+(defun resume-last-search-buffer ()
+  "open last helm-ag or hgrep buffer."
+  (interactive)
+  (cond ((get-buffer "*helm ag results*")
+         (switch-to-buffer-other-window "*helm ag results*"))
+        ((get-buffer "*helm-ag*")
+         (helm-resume "*helm-ag*"))
+        ((get-buffer "*hgrep*")
+         (switch-to-buffer-other-window "*hgrep*"))
+        (t
+         (message "No previous search buffer found"))))
+
+
 (use-package helm-ag
- :config (evil-leader/set-key
-   "/" 'helm-do-ag-this-dir))
+  :config
+  (evil-define-key 'normal helm-ag-mode-map
+    (kbd "RET") 'helm-ag-mode-jump-other-window
+    "gr" 'helm-ag--update-save-results)
+  (evil-leader/set-key
+    "?" 'resume-last-search-buffer
+    "/" 'helm-do-ag-this-dir
+    "." 'helm-do-ag-this-dir-insert-at-point))
 
 (use-package helm-swoop
   :config
@@ -238,6 +268,7 @@
   ; Call Gofmt before saving                                                    
   ;(add-hook 'before-save-hook 'gofmt-before-save)
   ; Godef jump key binding                                                      
+  (add-hook 'before-save-hook 'gofmt-before-save)
   (local-set-key (kbd "M-.") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
@@ -245,44 +276,63 @@
   :config
   (add-hook 'go-mode-hook 'my-go-mode-hook))
 
+(use-package go-guru)
+
 (use-package company-go
   :config
   (add-to-list 'company-backends 'company-go))
+
+(use-package go-stacktracer)
+
+(use-package go-direx)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Javascript
+
+(use-package dockerfile-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Javascript
 
 (use-package js2-mode
-  :mode (("\\.js$" . js2-mode))
-  :config (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2))))
+  :mode ("\\.js$" "\\.es6$")
+  :config
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (progn
+                (setq js2-basic-offset 4)
+                (setq js2-strict-missing-semi-warning nil)))))
 
 (use-package js2-refactor)
 
-(use-package tern
-  :diminish " T"
-  :commands (tern-mode)
-  :init (progn
-          (add-hook 'js2-mode-hook 'tern-mode)))
+;; (use-package tern
+;;   :diminish " T"
+;;   :commands (tern-mode)
+;;   :init (progn
+;;           (add-hook 'js2-mode-hook 'tern-mode)
+;;           (add-hook 'web-mode-hook 'tern-mode)))
 
-(use-package company-tern
-            :config (progn
-                      (add-to-list 'company-backends 'company-tern)))
+;; (use-package company-tern
+;;             :config (progn
+;;                       (add-to-list 'company-backends 'company-tern)))
 
 (use-package jade
   :config (add-hook 'js2-mode-hook #'jade-interaction-mode))
 
 (use-package web-mode
-  :mode ("\\.tsx\\'" "\\.jsx\\'")
+  :mode ("\\.tsx$" "\\.jsx$")
   :config
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (or (string-equal "tsx" (file-name-extension buffer-file-name))
-                        (string-equal "jsx" (file-name-extension buffer-file-name)))
-                (tide-setup)))))
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
+
+(use-package stylus-mode)
 
 (use-package tide
+  :init
+  (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
   :config
-  (add-hook 'typescript-mode-hook #'tide-setup))
+  (add-hook 'typescript-mode-hook #'tide-setup)
+  (add-hook 'js2-mode-hook #'tide-setup)
+  (add-hook 'web-mode-hook #'tide-setup))
 
 (use-package json-mode)
 
@@ -392,6 +442,25 @@
   (global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Yasnippet
+
+(use-package yasnippet
+  :config
+  (yas-global-mode))
+
+(use-package auto-yasnippet
+  :after yasnippet
+  :config
+  (defun aya-expand-and-insert ()
+    (interactive)
+    (evil-insert 1)
+    (aya-expand))
+
+  (evil-leader/set-key
+    "yy" 'aya-expand-and-insert
+    "yc" 'aya-create))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flycheck
 
 (use-package flycheck
@@ -407,6 +476,11 @@
 ;; Multitran
 
 (use-package multitran)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Protobuf
+
+(use-package protobuf-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org
