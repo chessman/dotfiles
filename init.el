@@ -322,6 +322,7 @@
 (use-package web-mode
   :mode ("\\.tsx$" "\\.jsx$")
   :config
+  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(tsx-tide)))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package stylus-mode)
