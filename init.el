@@ -49,6 +49,9 @@
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
 
+;; word boundaries
+(modify-syntax-entry ?_ "w")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup
 
