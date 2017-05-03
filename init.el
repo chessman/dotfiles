@@ -233,7 +233,7 @@
 
 	ensime-company-case-sensitive t
 
-	ensime-use-helm t
+	ensime-search-interface 'helm
 
 	ensime-startup-notification nil
 	ensime-startup-snapshot-notification nil
