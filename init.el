@@ -238,8 +238,6 @@
 	ensime-startup-notification nil
 	ensime-startup-snapshot-notification nil
 
-	ensime-server-logback "/home/ea/tmp/logback.xml"
-
 	scala-indent:use-javadoc-style t
 	scala-indent:default-run-on-strategy scala-indent:reluctant-strategy
 	scala-indent:align-forms nil
