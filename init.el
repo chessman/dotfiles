@@ -287,6 +287,10 @@
 
 (use-package go-direx)
 
+(use-package go-add-tags
+  :config
+  (setq go-add-tags-style 'lower-camel-case))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Javascript
 
