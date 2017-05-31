@@ -306,6 +306,7 @@
             (lambda ()
               (progn
                 (setq js2-basic-offset 4)
+                (setq js-switch-indent-offset 4)
                 (setq js2-strict-missing-semi-warning nil)))))
 
 (use-package js2-refactor)
