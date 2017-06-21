@@ -275,6 +275,7 @@
 
 (use-package go-mode
   :config
+  (setq gofmt-command "goimports")
   (add-hook 'go-mode-hook 'my-go-mode-hook))
 
 (use-package go-guru)
