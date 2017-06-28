@@ -282,6 +282,7 @@
 
 (use-package company-go
   :config
+  (setq company-go-show-annotation t)
   (add-to-list 'company-backends 'company-go))
 
 (use-package go-stacktracer)
@@ -447,6 +448,8 @@
   :config
   ; http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text
   (setq company-dabbrev-downcase nil)
+  (setq company-tooltip-limit 20)
+  (setq company-idle-delay 0)
   (global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
