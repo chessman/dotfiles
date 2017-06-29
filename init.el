@@ -449,7 +449,7 @@
   ; http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text
   (setq company-dabbrev-downcase nil)
   (setq company-tooltip-limit 20)
-  (setq company-idle-delay 0)
+  (setq company-idle-delay .2)
   (global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
