@@ -131,14 +131,10 @@
    "b" 'helm-mini
    "ff" 'helm-find-files)))
 
-(defun helm-do-ag-this-dir ()
- (interactive)
- (helm-do-ag (projectile-project-root)))
-
-(defun helm-do-ag-this-dir-insert-at-point ()
+(defun helm-do-ag-project-root-insert-at-point ()
   (interactive)
   (let ((helm-ag-insert-at-point 'symbol))
-    (helm-do-ag-this-dir)))
+    (helm-do-ag-project-root)))
 
 ;; from spacemacs
 (defun resume-last-search-buffer ()
@@ -161,8 +157,8 @@
     "gr" 'helm-ag--update-save-results)
   (evil-leader/set-key
     "?" 'resume-last-search-buffer
-    "/" 'helm-do-ag-this-dir
-    "." 'helm-do-ag-this-dir-insert-at-point))
+    "/" 'helm-do-ag-project-root
+    "." 'helm-do-ag-project-root-insert-at-point))
 
 (use-package helm-swoop
   :config
