@@ -185,6 +185,7 @@
       projectile-root-bottom-up
       projectile-root-top-down-recurring))
   (add-to-list 'projectile-globally-ignored-directories ".ensime_cache")
+  (add-to-list 'projectile-globally-ignored-directories "ltximg")
   (add-to-list 'projectile-globally-ignored-files ".ensime"))
 
 (use-package helm-projectile
