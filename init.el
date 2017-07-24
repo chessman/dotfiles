@@ -375,6 +375,11 @@
   "wk" 'evil-window-up)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; F-keys
+
+(global-set-key (kbd "<f3>") (lambda () (interactive) (find-file "~/org/work.org")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Init file
 
 (defun find-user-init-file ()
