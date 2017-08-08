@@ -48,6 +48,9 @@
 ;(setq compilation-read-command nil)
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
+(evil-leader/set-key
+  "cc" 'recompile
+  "ce" 'next-error)
 
 ;; word boundaries
 (modify-syntax-entry ?_ "w")
