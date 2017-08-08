@@ -56,10 +56,12 @@
 (modify-syntax-entry ?_ "w")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Backup
+;; Backup & Undo
 
+(setq undo-tree-auto-save-history t)
+(setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
 (setq delete-old-versions t
-  backup-directory-alist `(("." . "~/.saves"))
+  backup-directory-alist `(("." . "~/.emacs.d/saves"))
   backup-by-copying t
   kept-new-versions 6
   kept-old-versions 2
