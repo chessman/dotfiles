@@ -3,7 +3,7 @@ set mouse=a
 
 "буфер иксов
 if has('unnamedplus')
-    set clipboard=unnamedplus,autoselect
+    set clipboard=unnamedplus
 else
     set clipboard=unnamed
 endif
