@@ -434,6 +434,7 @@
   (add-hook 'scala-mode-hook (lambda ()
             (smartparens-strict-mode)))
   (add-hook 'js2-mode-hook 'smartparens-strict-mode)
+  (add-hook 'go-mode-hook 'smartparens-strict-mode)
   (bind-keys
    :map smartparens-mode-map
    ("M-]" . sp-unwrap-sexp)
