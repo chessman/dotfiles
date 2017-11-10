@@ -426,15 +426,23 @@
             (double-quote . "\"")
             (back-quote   . "`")))
 
+(defun sp-kill-hybrid-sexp-and-insert (arg)
+  (interactive "P")
+  (sp-kill-hybrid-sexp arg)
+  (evil-insert 1))
+
 (use-package smartparens
   :config
   (require 'smartparens-scala)
   (add-to-list 'sp-sexp-suffix (list 'js2-mode 'regexp "")) ;like smartparens-scala
+  (add-to-list 'sp-sexp-suffix (list 'go-mode 'regexp ""))
   (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'scala-mode-hook (lambda ()
-            (smartparens-strict-mode)))
+  (add-hook 'scala-mode-hook 'smartparens-strict-mode)
   (add-hook 'js2-mode-hook 'smartparens-strict-mode)
   (add-hook 'go-mode-hook 'smartparens-strict-mode)
+  (evil-define-key 'normal evil-smartparens-mode-map
+    (kbd "D") #'sp-kill-hybrid-sexp
+    (kbd "C") #'sp-kill-hybrid-sexp-and-insert)
   (bind-keys
    :map smartparens-mode-map
    ("M-]" . sp-unwrap-sexp)
@@ -448,7 +456,8 @@
    ("C-k {" . wrap-with-braces)
    ("C-k '" . wrap-with-single-quotes)
    ("C-k \"" . wrap-with-double-quotes)
-   ("C-k t" . sp-transpose-hybrid-sexp)))
+   ("C-k t" . sp-transpose-hybrid-sexp)
+   ("C-k p" . sp-push-hybrid-sexp)))
 
 (use-package evil-smartparens
   :config
