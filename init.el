@@ -254,7 +254,10 @@
 	scala-auto-insert-asterisk-in-comments t
 
 	flycheck-scalastyle-jar "~/bin/scalastyle_2.11-0.6.0.jar"
-	flycheck-scalastylerc "scalastyle-config.xml")
+	flycheck-scalastylerc "scalastyle-config.xml"
+
+        ;; workaround reread prompt: https://github.com/ensime/ensime-emacs/issues/678
+        revert-without-query (quote (".*/\\.ensime_cache/dep-src/source-jars/.*")))
 
   (ensime-mode))
 
