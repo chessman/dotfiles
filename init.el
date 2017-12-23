@@ -17,7 +17,6 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
 (require 'bind-key)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,13 +43,6 @@
 
 (setq-default fill-column 100)
 (auto-fill-mode)
-
-;(setq compilation-read-command nil)
-(setq compilation-scroll-output 'first-error)
-(global-set-key "\C-x\C-m" 'compile)
-(evil-leader/set-key
-  "cc" 'recompile
-  "ce" 'next-error)
 
 ;; word boundaries
 (modify-syntax-entry ?_ "w")
@@ -88,6 +80,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modeline
+
+(use-package diminish)
 
 (use-package smart-mode-line
   :config
@@ -386,6 +380,16 @@
   "wl" 'evil-window-right
   "wj" 'evil-window-down
   "wk" 'evil-window-up)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Compilation
+
+;(setq compilation-read-command nil)
+(setq compilation-scroll-output 'first-error)
+(global-set-key "\C-x\C-m" 'compile)
+(evil-leader/set-key
+  "cc" 'recompile
+  "ce" 'next-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; F-keys
