@@ -5,10 +5,10 @@
 (require 'package)
 (setq
  use-package-always-ensure t
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.org/packages/")
-                    ("melpa-stable" . "http://stable.melpa.org/packages/")))
+ package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                    ("org" . "https://orgmode.org/elpa/")
+                    ("melpa" . "https://melpa.org/packages/")
+                    ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 (package-initialize)
 (when (not package-archive-contents)
