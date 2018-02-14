@@ -385,10 +385,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Compilation
 
+(defun compile-noask ()
+  (interactive)
+  (compile compile-command))
+
 ;(setq compilation-read-command nil)
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
 (evil-leader/set-key
+  "cn" 'compile-noask
   "cc" 'recompile
   "ce" 'next-error)
 
