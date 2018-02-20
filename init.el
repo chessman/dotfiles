@@ -133,6 +133,7 @@
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
   (evil-leader/set-key
    "b" 'helm-mini
+   "fb" 'helm-bookmarks
    "ff" 'helm-find-files)))
 
 (defun helm-do-ag-project-root-insert-at-point ()
@@ -342,8 +343,6 @@
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(use-package stylus-mode)
-
 (use-package tide
   :init
   (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
@@ -362,6 +361,11 @@
     "g s" 'magit-status))
 
 (use-package evil-magit)
+
+(use-package magithub
+  :after magit
+  :ensure t
+  :config (magithub-feature-autoinject t))
 
 (setq-default ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq-default ediff-prefer-iconified-control-frame t)
@@ -590,7 +594,7 @@
     ("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default)))
  '(package-selected-packages
    (quote
-    (yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern))))
+    (magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
