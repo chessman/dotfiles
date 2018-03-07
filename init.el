@@ -50,14 +50,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup & Undo
 
-(setq undo-tree-auto-save-history t)
-(setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
-(setq delete-old-versions t
-  backup-directory-alist `(("." . "~/.emacs.d/saves"))
-  backup-by-copying t
-  kept-new-versions 6
-  kept-old-versions 2
-  version-control t)
+(use-package undo-tree
+  :diminish
+  :config
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
+  (setq delete-old-versions t
+        backup-directory-alist `(("." . "~/.emacs.d/saves"))
+        backup-by-copying t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
@@ -81,11 +85,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modeline
 
-(use-package diminish)
+(use-package diminish
+  :config
+  (diminish 'eldoc-mode))
 
 (use-package smart-mode-line
   :config
   (setq sml/no-confirm-load-theme t)
+  (setq sml/pre-minor-modes-separator " ")
   (sml/setup))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -454,6 +461,7 @@
   (evil-insert 1))
 
 (use-package smartparens
+  :diminish "S"
   :config
   (require 'smartparens-scala)
   (add-to-list 'sp-sexp-suffix (list 'js2-mode 'regexp "")) ;like smartparens-scala
@@ -482,6 +490,7 @@
    ("C-k p" . sp-push-hybrid-sexp)))
 
 (use-package evil-smartparens
+  :diminish
   :config
   (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
 
@@ -493,6 +502,7 @@
 ;; Company
 
 (use-package company
+  :diminish
   :config
   ; http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text
   (setq company-dabbrev-downcase nil)
@@ -505,7 +515,8 @@
 
 (use-package yasnippet
   :config
-  (yas-global-mode))
+  (yas-global-mode)
+  (diminish 'yas-minor-mode))
 
 (use-package yasnippet-snippets)
 
@@ -545,6 +556,7 @@
 ;; Flycheck
 
 (use-package flycheck
+  :diminish "F"
   :config
   (setq-default flycheck-disabled-checkers '(go-gofmt go-golint))
   (global-flycheck-mode))
@@ -589,6 +601,10 @@
 ;(use-package evil-org)
 
 (use-package org-pomodoro)
+
+;; guaranteed kill
+(diminish 'auto-revert-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
