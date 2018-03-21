@@ -593,7 +593,8 @@
   :ensure org-plus-contrib
   :config
   (require 'ox)
-  (require 'org-drill))
+  (require 'org-drill)
+  (org-agenda-files (quote ("~/Dropbox/org/events.org"))))
 
 (use-package org-evil)
 
