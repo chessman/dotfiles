@@ -548,7 +548,7 @@
 (use-package avy
   :config
   (evil-leader/set-key
-    "ac" 'avy-goto-char-1
+    "ac" 'avy-goto-char-timer
     "aw" 'avy-goto-word-1
     "al" 'avy-goto-line))
 
