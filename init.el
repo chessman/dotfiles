@@ -37,7 +37,7 @@
 (set-frame-font "Source Code Pro")
 
 ;(setq-default browse-url-browser-function 'eww-browse-url)
-(setq-default browse-url-browser-function 'browse-url-chrome)
+(setq-default browse-url-browser-function 'browse-url-firefox)
 
 (column-number-mode)
 
@@ -594,7 +594,7 @@
   :config
   (require 'ox)
   (require 'org-drill)
-  (org-agenda-files (quote ("~/Dropbox/org/events.org"))))
+  (setq org-agenda-files (quote ("~/Dropbox/org/events.org"))))
 
 (use-package org-evil)
 
