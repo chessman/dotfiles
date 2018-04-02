@@ -374,10 +374,10 @@
 
 (use-package evil-magit)
 
-(use-package magithub
-  :after magit
-  :ensure t
-  :config (magithub-feature-autoinject t))
+;(use-package magithub
+;  :after magit
+;  :ensure t
+;  :config (magithub-feature-autoinject t))
 
 (setq-default ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq-default ediff-prefer-iconified-control-frame t)
