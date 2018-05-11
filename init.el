@@ -308,8 +308,6 @@
   :config
   (setq go-add-tags-style 'lower-camel-case))
 
-(use-package godoctor)
-
 (use-package go-impl)
 
 (use-package go-fill-struct)
