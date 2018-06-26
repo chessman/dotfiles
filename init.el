@@ -191,11 +191,6 @@
   :diminish projectile-mode
   :config
   (projectile-mode)
-  (setq-default projectile-project-root-files-functions
-    '(projectile-root-local
-      projectile-root-top-down
-      projectile-root-bottom-up
-      projectile-root-top-down-recurring))
   (add-to-list 'projectile-globally-ignored-directories ".ensime_cache")
   (add-to-list 'projectile-globally-ignored-directories "ltximg")
   (add-to-list 'projectile-globally-ignored-files ".ensime"))
