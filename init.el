@@ -10,7 +10,10 @@
                     ("melpa" . "https://melpa.org/packages/")
                     ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
-(package-initialize)
+
+; FIXME: is it still needed?
+(when (version< emacs-version "26")
+    (package-initialize))
 (when (not package-archive-contents)
   (package-refresh-contents)
   (package-install 'use-package))
