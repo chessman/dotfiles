@@ -287,16 +287,8 @@
 (use-package flycheck-gometalinter
   :ensure t
   :config
-  (setq-default flycheck-disabled-checkers '(
-                                             go-gofmt
-                                             go-golint
-                                             go-vet
-                                             ;go-build
-                                             go-test
-                                             go-errcheck
-                                             go-unconvert
-                                             go-megacheck))
   (setq flycheck-gometalinter-disable-linters '(
+                                                "megacheck" ; good but slow
                                                 "structcheck"
                                                 "deadcode"
                                                 "golint"
@@ -311,9 +303,14 @@
                                                 "maligned"))
   (setq flycheck-gometalinter-vendor t)
   (setq flycheck-gometalinter-tests t)
-  ; should be added to the end (t is append)
-  (add-to-list 'flycheck-checkers 'gometalinter t)
-  (flycheck-add-next-checker 'go-build 'gometalinter))
+  (setq flycheck-gometalinter-deadline "10s")
+  (flycheck-gometalinter-setup)
+  ;; change (flycheck-gometalinter-setup) with the following lines to use metalinter
+  ;; after other linters
+  ;; should be added to the end (t is append)
+  ;; (add-to-list 'flycheck-checkers 'gometalinter t)
+  ;; (flycheck-add-next-checker 'go-build 'gometalinter)
+  )
 
 (use-package go-mode
   :config
