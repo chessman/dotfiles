@@ -288,7 +288,6 @@
   :ensure t
   :config
   (setq flycheck-gometalinter-disable-linters '(
-                                                "megacheck" ; good but slow
                                                 "structcheck"
                                                 "deadcode"
                                                 "golint"
@@ -303,6 +302,7 @@
                                                 "maligned"))
   (setq flycheck-gometalinter-vendor t)
   (setq flycheck-gometalinter-tests t)
+  (setq flycheck-gometalinter-fast t)
   (setq flycheck-gometalinter-deadline "10s")
   (flycheck-gometalinter-setup)
   ;; change (flycheck-gometalinter-setup) with the following lines to use metalinter
