@@ -112,7 +112,10 @@
   :config
   (progn
     (evil-leader/set-leader "SPC")
-    (global-evil-leader-mode)))
+    (global-evil-leader-mode)
+    ; kill buffer to create a new one with evil
+    ; https://github.com/cofi/evil-leader/issues/10#issuecomment-31290512
+    (kill-buffer "*Messages*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm
@@ -637,7 +640,7 @@
  '(custom-safe-themes
    '("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default))
  '(package-selected-packages
-   '(flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern)))
+   '(flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
