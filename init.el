@@ -436,8 +436,11 @@
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
 (evil-leader/set-key
-  "cn" 'compile-noask
-  "cc" 'recompile
+  "cl" 'flycheck-list-errors
+  "cn" 'next-error
+  "cp" 'previous-error
+  "cc" 'compile-noask
+  "cr" 'recompile
   "ce" 'next-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
