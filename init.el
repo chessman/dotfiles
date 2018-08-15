@@ -248,6 +248,8 @@
 	ensime-startup-notification nil
 	ensime-startup-snapshot-notification nil
 
+        ensime-eldoc-hints 'type
+
 	scala-indent:use-javadoc-style t
 	scala-indent:default-run-on-strategy scala-indent:reluctant-strategy
 	scala-indent:align-forms nil
