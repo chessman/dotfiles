@@ -519,7 +519,10 @@
    ("C-k '" . wrap-with-single-quotes)
    ("C-k \"" . wrap-with-double-quotes)
    ("C-k t" . sp-transpose-hybrid-sexp)
-   ("C-k p" . sp-push-hybrid-sexp)))
+   ("C-k p" . sp-push-hybrid-sexp))
+
+  (setq sp-highlight-pair-overlay nil)
+  (sp-local-pair 'go-mode "{" nil :post-handlers '(("||\n[i]" "RET"))))
 
 (use-package evil-smartparens
   :diminish
