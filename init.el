@@ -319,6 +319,37 @@
 
 (use-package go-mode
   :config
+
+  ;; https://github.com/dominikh/go-mode.el/pull/233
+  (defun go-packages-native ()
+    "Return a list of all installed Go packages.
+It looks for archive files in /pkg/."
+    (sort
+     (delete-dups
+      (cl-mapcan
+       (lambda (pkgdir)
+         (cl-mapcan (lambda (dir)
+                      (mapcar (lambda (file)
+                                (let ((sub (substring file (length pkgdir) -2)))
+                                  (mapconcat #'identity (cdr (split-string sub "/")) "/")))
+                              (if (file-directory-p dir)
+                                  (directory-files dir t "\\.a$")
+                                (if (string-match-p "\\.a$" dir)
+                                    `(,dir)))))
+                    (if (file-directory-p pkgdir)
+                        (append (directory-files pkgdir t "\\.a$") (go--directory-dirs pkgdir)))))
+       (apply 'append
+              (mapcar (lambda (dir)
+                        (delete nil (let ((pkgdir (concat dir "/pkg")))
+                                      (mapcar (lambda (sub)
+                                                (unless (or (string-match-p
+                                                             "\\(dep\\|race\\|dyn\\|shared\\|include\\|obj\\|tool\\)"
+                                                             sub)
+                                                            (member sub '("." ".."))) (concat pkgdir "/" sub)))
+                                              (directory-files pkgdir nil nil t))))) (go-root-and-paths)))))
+     #'string<))
+
+  
   (setq gofmt-command "goimports")
   (add-hook 'go-mode-hook 'my-go-mode-hook))
 
