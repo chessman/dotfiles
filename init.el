@@ -620,40 +620,44 @@
 ;; Turn Postgres into Cockroach
 ;; https://logicgrimoire.wordpress.com/2018/04/27/how-to-use-cockroachdb-with-emacs-sql-mode/
 
-(setq sql-postgres-program "cockroach")
-(setq sql-postgres-options
-      '("sql" "--insecure"))
-(setq sql-postgres-login-params
-      '((user :default "root")
-        (database :default "")
-        (server :default "localhost")
-        (port :default 26257)))
-(defun sql-comint-cockroach (product options &optional buf-name)
-  "Create comint buffer and connect to CockroachDB."
-  (let ((params
-         (append
-          options
-          (if (not (= 0 sql-port))
-              (list "--port" (number-to-string sql-port)))
-          (if (not (string= "" sql-user))
-              (list "--user" sql-user))
-          (if (not (string= "" sql-server))
-              (list "--host" sql-server))
-          (if (not (string= "" sql-database))
-              (list "--database" sql-database)))))
-    (sql-comint product params)))
-(Sql-set-product-feature 'postgres
-                         :sqli-comint-func #'sql-comint-cockroach)
-(sql-set-product-feature 'postgres
-                         :prompt-regexp "^[a-z]+\@[a-zA-Z0-9\.-_]+:[0-9]+/\\([a-z]+\\)?> ")
-(sql-set-product-feature 'postgres
-                         :prompt-length 0)
-(sql-set-product-feature 'postgres
-                         :prompt-cont-regexp "^ +-> ")
-(sql-set-product-feature 'postgres
-                         :terminator '(";" . ";"))
-(sql-set-product-feature 'postgres
-                         :list-all "SHOW TABLES;")
+(defun sql-cockroach ()
+  (interactive)
+  (require 'sql)
+  (setq sql-postgres-program "cockroach")
+  (setq sql-postgres-options
+        '("sql" "--insecure"))
+  (setq sql-postgres-login-params
+        '((user :default "root")
+          (database :default "")
+          (server :default "localhost")
+          (port :default 26257)))
+  (defun sql-comint-cockroach (product options &optional buf-name)
+    "Create comint buffer and connect to CockroachDB."
+    (let ((params
+           (append
+            options
+            (if (not (= 0 sql-port))
+                (list "--port" (number-to-string sql-port)))
+            (if (not (string= "" sql-user))
+                (list "--user" sql-user))
+            (if (not (string= "" sql-server))
+                (list "--host" sql-server))
+            (if (not (string= "" sql-database))
+                (list "--database" sql-database)))))
+      (sql-comint product params)))
+  (sql-set-product-feature 'postgres
+                           :sqli-comint-func #'sql-comint-cockroach)
+  (sql-set-product-feature 'postgres
+                           :prompt-regexp "^[a-z]+\@[a-zA-Z0-9\.-_]+:[0-9]+/\\([a-z]+\\)?> ")
+  (sql-set-product-feature 'postgres
+                           :prompt-length 0)
+  (sql-set-product-feature 'postgres
+                           :prompt-cont-regexp "^ +-> ")
+  (sql-set-product-feature 'postgres
+                           :terminator '(";" . ";"))
+  (sql-set-product-feature 'postgres
+                           :list-all "SHOW TABLES;")
+  (sql-postgres))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org
