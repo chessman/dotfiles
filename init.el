@@ -24,7 +24,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Striping & Defaults
-
 (setq inhibit-startup-screen t)
 
 (setq frame-title-format '("" "%b @ Emacs " emacs-version))
@@ -223,6 +222,13 @@
 
 (use-package octave
   :mode ("\\.m\\'" . octave-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP
+
+(use-package lsp-mode)
+(use-package company-lsp)
+(use-package lsp-go)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
