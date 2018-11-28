@@ -113,8 +113,8 @@
   (progn
     (evil-leader/set-leader "SPC")
     (global-evil-leader-mode)
-    ; kill buffer to create a new one with evil
-    ; https://github.com/cofi/evil-leader/issues/10#issuecomment-31290512
+                                        ; kill buffer to create a new one with evil
+                                        ; https://github.com/cofi/evil-leader/issues/10#issuecomment-31290512
     (kill-buffer "*Messages*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
