@@ -296,33 +296,40 @@
   (local-set-key (kbd "M-.") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
-(use-package flycheck-gometalinter
+(use-package flycheck-golangci-lint
   :ensure t
   :config
-  (setq flycheck-gometalinter-disable-linters '(
-                                                "structcheck"
-                                                "deadcode"
-                                                "golint"
-                                                "gas"
-                                                "errcheck"
-                                                "gocyclo"
-                                                "goconst"
-                                                "vetshadow"
-                                                "gotype"
-                                                "varcheck"
-                                                "gotypex"
-                                                "maligned"))
-  (setq flycheck-gometalinter-vendor t)
-  (setq flycheck-gometalinter-tests t)
-  (setq flycheck-gometalinter-fast t)
-  (setq flycheck-gometalinter-deadline "10s")
-  (flycheck-gometalinter-setup)
-  ;; change (flycheck-gometalinter-setup) with the following lines to use metalinter
-  ;; after other linters
-  ;; should be added to the end (t is append)
-  ;; (add-to-list 'flycheck-checkers 'gometalinter t)
-  ;; (flycheck-add-next-checker 'go-build 'gometalinter)
-  )
+  (setq flycheck-golangci-lint-tests t)
+  (setq flycheck-golangci-lint-fast t)
+  :hook (go-mode . flycheck-golangci-lint-setup))
+
+;; (use-package flycheck-gometalinter
+;;   :ensure t
+;;   :config
+;;   (setq flycheck-gometalinter-disable-linters '(
+;;                                                 "structcheck"
+;;                                                 "deadcode"
+;;                                                 "golint"
+;;                                                 "gas"
+;;                                                 "errcheck"
+;;                                                 "gocyclo"
+;;                                                 "goconst"
+;;                                                 "vetshadow"
+;;                                                 "gotype"
+;;                                                 "varcheck"
+;;                                                 "gotypex"
+;;                                                 "maligned"))
+;;   (setq flycheck-gometalinter-vendor t)
+;;   (setq flycheck-gometalinter-tests t)
+;;   (setq flycheck-gometalinter-fast t)
+;;   (setq flycheck-gometalinter-deadline "10s")
+;;   (flycheck-gometalinter-setup)
+;;   ;; change (flycheck-gometalinter-setup) with the following lines to use metalinter
+;;   ;; after other linters
+;;   ;; should be added to the end (t is append)
+;;   ;; (add-to-list 'flycheck-checkers 'gometalinter t)
+;;   ;; (flycheck-add-next-checker 'go-build 'gometalinter)
+;;   )
 
 (use-package go-mode
   :config
