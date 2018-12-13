@@ -373,6 +373,7 @@ It looks for archive files in /pkg/."
 (use-package company-go
   :config
   (setq company-go-show-annotation t)
+  (setq company-go-gocode-args '("-unimported-packages" "-builtin" "-fallback-to-source"))
   (add-to-list 'company-backends 'company-go))
 
 ;; (use-package company-tabnine
