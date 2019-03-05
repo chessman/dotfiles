@@ -10,9 +10,7 @@ go get -u golang.org/x/tools/cmd/...
 go get -u honnef.co/go/tools/...
 go get -u github.com/davidrjenni/reftools/cmd/fillstruct
 go get -u github.com/sourcegraph/go-langserver
-# metalinter
-cd ~/
-curl -L https://git.io/vp6lP | sh
+go get -u github.com/saibing/bingo
 go get -u github.com/golangci/golangci-lint
 cd $GOPATH/src/github.com/golangci/golangci-lint/cmd/golangci-lint
 go install -ldflags "-X 'main.version=$(git rev-parse --abbrev-ref HEAD)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
