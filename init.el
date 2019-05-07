@@ -451,7 +451,7 @@ It looks for archive files in /pkg/."
 (use-package go-eldoc)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Javascript
+;; Docker
 
 (use-package dockerfile-mode)
 
@@ -496,8 +496,11 @@ It looks for archive files in /pkg/."
   (add-hook 'typescript-mode-hook #'tide-setup)
   (add-hook 'js2-mode-hook #'tide-setup)
   (add-hook 'web-mode-hook #'tide-setup))
-
 (use-package json-mode)
+
+(use-package elm-mode
+  :config
+(add-to-list 'company-backends 'company-elm))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Magit
@@ -797,9 +800,11 @@ It looks for archive files in /pkg/."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default))
+   (quote
+    ("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default)))
  '(package-selected-packages
-   '(treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
+   (quote
+    (treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
