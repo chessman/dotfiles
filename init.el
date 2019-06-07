@@ -295,20 +295,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 
-;; (use-package lsp-mode
-;;   :commands lsp)
+(use-package lsp-mode
+  :commands lsp)
 
-;; (use-package lsp-ui :commands lsp-ui-mode)
-;; (use-package company-lsp :commands company-lsp)
+(use-package lsp-ui :commands lsp-ui-mode
+  :config
+ (setq lsp-ui-doc-enable nil)
+ (setq lsp-ui-sideline-enable nil))
 
-;; (use-package lsp-mode
-;;   :config
-;;   (require 'lsp-clients)
-;;   (add-hook 'go-mode-hook 'lsp))
-;; (use-package company-lsp
-;;   :config
-;;   (add-to-list 'company-backends 'company-lsp))
-;; (use-package lsp-ui)
+(use-package company-lsp :commands company-lsp)
+
+(add-hook 'go-mode-hook #'lsp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
@@ -388,34 +385,6 @@
   (setq flycheck-golangci-lint-tests t)
   (setq flycheck-golangci-lint-fast t)
   :hook (go-mode . flycheck-golangci-lint-setup))
-
-;; (use-package flycheck-gometalinter
-;;   :ensure t
-;;   :config
-;;   (setq flycheck-gometalinter-disable-linters '(
-;;                                                 "structcheck"
-;;                                                 "deadcode"
-;;                                                 "golint"
-;;                                                 "gas"
-;;                                                 "errcheck"
-;;                                                 "gocyclo"
-;;                                                 "goconst"
-;;                                                 "vetshadow"
-;;                                                 "gotype"
-;;                                                 "varcheck"
-;;                                                 "gotypex"
-;;                                                 "maligned"))
-;;   (setq flycheck-gometalinter-vendor t)
-;;   (setq flycheck-gometalinter-tests t)
-;;   (setq flycheck-gometalinter-fast t)
-;;   (setq flycheck-gometalinter-deadline "10s")
-;;   (flycheck-gometalinter-setup)
-;;   ;; change (flycheck-gometalinter-setup) with the following lines to use metalinter
-;;   ;; after other linters
-;;   ;; should be added to the end (t is append)
-;;   ;; (add-to-list 'flycheck-checkers 'gometalinter t)
-;;   ;; (flycheck-add-next-checker 'go-build 'gometalinter)
-;;   )
 
 (use-package go-mode
   :config
@@ -575,9 +544,9 @@ It looks for archive files in /pkg/."
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
 (evil-leader/set-key
-  "cl" 'flycheck-list-errors
-  "cn" 'next-error
-  "cp" 'previous-error
+  "cl" 'flymake-show-diagnostics-buffer
+  "cn" 'flymake-goto-next-error
+  "cp" 'flymake-goto-prev-error
   "cc" 'compile-noask
   "cr" 'recompile
   "ce" 'next-error)
@@ -730,7 +699,8 @@ It looks for archive files in /pkg/."
 (use-package flycheck
   :diminish "F"
   :config
-  (global-flycheck-mode))
+  ;(global-flycheck-mode)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restclient
