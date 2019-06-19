@@ -306,66 +306,7 @@
 (use-package company-lsp :commands company-lsp)
 
 (add-hook 'go-mode-hook #'lsp)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Scala
-
-(defun scala-settings ()
-  (setq ensime-sem-high-faces
-	'((var . scala-font-lock:var-face)
-	  (val . (:inherit font-lock-constant-face :slant italic))
-	  (varField . scala-font-lock:var-face)
-	  (valField . (:inherit font-lock-constant-face :slant italic))
-	  (functionCall . font-lock-function-name-face)
-	  (operator . font-lock-keyword-face)
-	  (param . (:slant italic))
-	  (class . font-lock-type-face)
-	  (trait .  (:inherit font-lock-type-face :slant italic))
-	  (object . font-lock-constant-face)
-	  (package . font-lock-preprocessor-face)
-	  (implicitConversion . nil) ;fixed
-	  (implicitParams . nil) ;fixed
-	  (deprecated . (:strike-through "dark gray")))
-
-	ensime-implicit-gutter-icons nil
-
-	ensime-auto-generate-config t
-
-	ensime-company-case-sensitive t
-
-	ensime-search-interface 'helm
-
-	ensime-startup-notification nil
-	ensime-startup-snapshot-notification nil
-
-        ensime-eldoc-hints 'type
-
-	scala-indent:use-javadoc-style t
-	scala-indent:default-run-on-strategy scala-indent:reluctant-strategy
-	scala-indent:align-forms nil
-	scala-indent:align-parameters nil
-
-	;; layers/+lang/scala/config.el
-	scala-auto-insert-asterisk-in-comments t
-
-	flycheck-scalastyle-jar "~/bin/scalastyle_2.11-0.6.0.jar"
-	flycheck-scalastylerc "scalastyle-config.xml"
-
-        ;; workaround reread prompt: https://github.com/ensime/ensime-emacs/issues/678
-        revert-without-query (quote (".*/\\.ensime_cache/dep-src/source-jars/.*")))
-
-  (ensime-mode))
-
-(use-package ensime
-  :pin melpa
-  :config
-  (progn
-    (evil-leader/set-key
-      "rt" 'ensime-import-type-at-point
-      "ht" 'ensime-print-type-at-point
-      "gg" 'ensime-edit-definition
-      "cc" 'ensime-sbt-do-compile)
-    (add-hook 'scala-mode-hook 'scala-settings)))
+(add-hook 'scala-mode-hook #'lsp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
