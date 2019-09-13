@@ -114,6 +114,10 @@
                                         ; https://github.com/cofi/evil-leader/issues/10#issuecomment-31290512
     (kill-buffer "*Messages*")))
 
+(use-package evil-collection
+  :config
+  (evil-collection-init 'xref))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm
 
@@ -195,6 +199,8 @@
   :config
   (projectile-mode)
   (add-to-list 'projectile-globally-ignored-directories ".ensime_cache")
+  (add-to-list 'projectile-globally-ignored-directories ".bloop")
+  (add-to-list 'projectile-globally-ignored-directories ".metals")
   (add-to-list 'projectile-globally-ignored-directories "ltximg")
   (add-to-list 'projectile-globally-ignored-files ".ensime"))
 
@@ -296,17 +302,40 @@
 ;; LSP
 
 (use-package lsp-mode
-  :commands lsp)
+  :commands lsp
+  :config (setq lsp-prefer-flymake nil)
+  )
 
-(use-package lsp-ui :commands lsp-ui-mode
+(use-package lsp-ui
   :config
- (setq lsp-ui-doc-enable nil)
- (setq lsp-ui-sideline-enable nil))
+  (setq lsp-ui-doc-position 'top)
+  ;(setq lsp-ui-doc-position 'at-point)
+  (setq lsp-ui-doc-alignment 'window)
+ )
 
-(use-package company-lsp :commands company-lsp)
+(use-package company-lsp)
 
 (add-hook 'go-mode-hook #'lsp)
 (add-hook 'scala-mode-hook #'lsp)
+
+(use-package helm-lsp)
+(use-package lsp-treemacs)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Scala
+
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
@@ -488,9 +517,9 @@ It looks for archive files in /pkg/."
 (setq compilation-scroll-output 'first-error)
 (global-set-key "\C-x\C-m" 'compile)
 (evil-leader/set-key
-  "cl" 'flymake-show-diagnostics-buffer
-  "cn" 'flymake-goto-next-error
-  "cp" 'flymake-goto-prev-error
+  ;; "cl" 'flymake-show-diagnostics-buffer
+  ;; "cn" 'flymake-goto-next-error
+  ;; "cp" 'flymake-goto-prev-error
   "cc" 'compile-noask
   "cr" 'recompile
   "ce" 'next-error)
@@ -643,7 +672,7 @@ It looks for archive files in /pkg/."
 (use-package flycheck
   :diminish "F"
   :config
-  ;(global-flycheck-mode)
+  (global-flycheck-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -741,11 +770,9 @@ It looks for archive files in /pkg/."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default)))
+   '("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default))
  '(package-selected-packages
-   (quote
-    (treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish))))
+   '(evil-collection lsp-treemacs helm-lsp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
