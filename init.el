@@ -98,6 +98,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evil
 
+(setq evil-want-keybinding nil)
+
 (use-package evil
   :config
   (evil-mode 1)
@@ -142,6 +144,7 @@
   (setq helm-echo-input-in-header-line t
         helm-display-header-line nil
         helm-always-two-windows t
+        helm-split-window-inside-p t ;for using helm in treemacs
         ;helm-follow-mode-persistent t
         helm-M-x-fuzzy-match t)
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
@@ -269,14 +272,16 @@
       (`(t . t)
        (treemacs-git-mode 'deferred))
       (`(t . _)
-       (treemacs-git-mode 'simple))))
+       (treemacs-git-mode 'simple)))
+
+  (evil-leader/set-key
+    "tt" 'treemacs
+    "tb" 'treemacs-bookmark
+    "tf" 'treemacs-find-file))
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
         ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-evil
@@ -303,8 +308,13 @@
 
 (use-package lsp-mode
   :commands lsp
-  :config (setq lsp-prefer-flymake nil)
-  )
+  :bind ("M-/" . lsp-find-references)
+  :config
+  (setq lsp-prefer-flymake nil)
+  (evil-leader/set-key
+    "ss" 'helm-lsp-global-workspace-symbol
+    "te" 'lsp-treemacs-errors-list
+    "ts" 'lsp-treemacs-symbols))
 
 (use-package lsp-ui
   :config
