@@ -334,8 +334,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
 
+(defun complete-at-point ()
+  (interactive)
+  (evil-forward-word)
+  (evil-append 1)
+  (company-complete))
+
 (use-package scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$")
+  :mode "\\.s\\(cala\\|bt\\)$"
+  :bind
+  (:map scala-mode-map
+        ("M-RET" . complete-at-point)))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
@@ -356,7 +365,6 @@
   ; Call Gofmt before saving                                                    
   (add-hook 'before-save-hook 'gofmt-before-save)
   ; Godef jump key binding                                                      
-  (local-set-key (kbd "M-.") 'godef-jump)
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
 (use-package flycheck-golangci-lint
