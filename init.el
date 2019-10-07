@@ -458,17 +458,6 @@ It looks for archive files in /pkg/."
 
 (use-package js2-refactor)
 
-;; (use-package tern
-;;   :diminish " T"
-;;   :commands (tern-mode)
-;;   :init (progn
-;;           (add-hook 'js2-mode-hook 'tern-mode)
-;;           (add-hook 'web-mode-hook 'tern-mode)))
-
-;; (use-package company-tern
-;;             :config (progn
-;;                       (add-to-list 'company-backends 'company-tern)))
-
 (use-package indium
   :config (add-hook 'js2-mode-hook #'indium-interaction-mode))
 
@@ -477,13 +466,6 @@ It looks for archive files in /pkg/."
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
-(use-package tide
-  :init
-  (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
-  :config
-  (add-hook 'typescript-mode-hook #'tide-setup)
-  (add-hook 'js2-mode-hook #'tide-setup)
-  (add-hook 'web-mode-hook #'tide-setup))
 (use-package json-mode)
 
 (use-package elm-mode
