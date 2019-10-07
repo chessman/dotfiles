@@ -336,7 +336,7 @@
 
 (defun complete-at-point ()
   (interactive)
-  (evil-forward-word)
+  (evil-forward-word-end)
   (evil-append 1)
   (company-complete))
 
