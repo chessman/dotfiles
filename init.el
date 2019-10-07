@@ -37,7 +37,7 @@
 (set-frame-font "Source Code Pro")
 
 ;(setq-default browse-url-browser-function 'eww-browse-url)
-(setq-default browse-url-browser-function 'browse-url-firefox)
+(setq-default browse-url-browser-function 'browse-url-chrome)
 
 (column-number-mode)
 
@@ -756,6 +756,11 @@ It looks for archive files in /pkg/."
 
 (use-package org-pomodoro)
 
+(use-package org-jira
+  :config
+  (setq request-log-level 'debug)
+  (setq request-message-level 'debug)
+  (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
 ;; guaranteed kill
 (diminish 'auto-revert-mode)
 
@@ -767,7 +772,7 @@ It looks for archive files in /pkg/."
  '(custom-safe-themes
    '("b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default))
  '(package-selected-packages
-   '(evil-collection lsp-treemacs helm-lsp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
+   '(org-jira evil-collection lsp-treemacs helm-lsp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package tide smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader ensime company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
