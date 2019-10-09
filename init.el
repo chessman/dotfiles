@@ -317,8 +317,7 @@
   :config
   (setq lsp-ui-doc-position 'top)
   ;(setq lsp-ui-doc-position 'at-point)
-  (setq lsp-ui-doc-alignment 'window)
- )
+  (setq lsp-ui-doc-alignment 'window))
 
 (use-package company-lsp)
 
@@ -363,13 +362,6 @@
   (add-hook 'before-save-hook 'gofmt-before-save)
   ; Godef jump key binding                                                      
   (local-set-key (kbd "M-*") 'pop-tag-mark))
-
-(use-package flycheck-golangci-lint
-  :ensure t
-  :config
-  (setq flycheck-golangci-lint-tests t)
-  (setq flycheck-golangci-lint-fast t)
-  :hook (go-mode . flycheck-golangci-lint-setup))
 
 (use-package go-mode
   :config
@@ -665,7 +657,11 @@ It looks for archive files in /pkg/."
   :diminish "F"
   :config
   (global-flycheck-mode)
-  )
+  (add-hook 'flycheck-mode-hook 'flycheck-pos-tip-mode))
+
+(use-package flycheck-pos-tip
+  :config
+(setq flycheck-pos-tip-timeout 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restclient
@@ -767,11 +763,9 @@ It looks for archive files in /pkg/."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("11e57648ab04915568e558b77541d0e94e69d09c9c54c06075938b6abc0189d8" "174502267725776b47bdd2d220f035cae2c00c818765b138fea376b2cdc15eb6" "b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default)))
+   '("11e57648ab04915568e558b77541d0e94e69d09c9c54c06075938b6abc0189d8" "174502267725776b47bdd2d220f035cae2c00c818765b138fea376b2cdc15eb6" "b571f92c9bfaf4a28cb64ae4b4cdbda95241cd62cf07d942be44dc8f46c491f4" "31b2145c933e41fbbda48b15278cdcce3779db7e92ca434ad3044b3392ad6ae3" default))
  '(package-selected-packages
-   (quote
-    (treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish))))
+   '(flycheck-pos-tip treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs elm-mode forge aggressive-indent company-tabnine flycheck-golangci-lint company-lsp lsp-go lsp-mode flycheck-gometalinter go-rename go-eldoc emacs-go-eldoc magithub yasnippet-snippets go-fill-struct build-status badwolf-theme go-impl godoctor yaml-mode avy go-add-tags indium company-go go-mode json-mode web-mode use-package smart-mode-line restclient php-mode org-pomodoro org-evil multitran monokai-theme molokai-theme js2-refactor helm-swoop helm-projectile helm-ag git-timemachine evil-smartparens evil-magit evil-leader company-tern go-guru go-direx go-stacktracer dockerfile-mode auto-yasnippet protobuf-mode org-plus-contrib diminish)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
