@@ -10,7 +10,6 @@
                     ("melpa" . "https://melpa.org/packages/")
                     ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
-
 (when (not package-archive-contents)
   ;(package-refresh-contents)
   (package-initialize)
@@ -339,7 +338,7 @@
   (company-complete))
 
 (use-package scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$"
+  :mode "^\w+\\.s\\(cala\\|bt\\)$"
   :bind
   (:map scala-mode-map
         ("M-RET" . complete-at-point)))
@@ -583,6 +582,7 @@ It looks for archive files in /pkg/."
    ("C-k {" . wrap-with-braces)
    ("C-k '" . wrap-with-single-quotes)
    ("C-k \"" . wrap-with-double-quotes)
+   ("C-k r" . sp-rewrap-sexp)
    ("C-k t" . sp-transpose-hybrid-sexp)
    ("C-k p" . sp-push-hybrid-sexp))
 
