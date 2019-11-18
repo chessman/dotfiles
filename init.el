@@ -357,6 +357,10 @@
   (:map scala-mode-map
         ("M-RET" . complete-at-point)))
 
+(add-hook 'scala-mode-hook (lambda ()
+                             (setq prettify-symbols-alist scala-prettify-symbols-alist)
+                             (prettify-symbols-mode)))
+
 (use-package sbt-mode
   :commands sbt-start sbt-command
   :config
