@@ -35,7 +35,8 @@
 
 (setq-default indent-tabs-mode nil)
 
-(set-frame-font "Source Code Pro")
+(set-frame-font "Hack")
+;(set-frame-font "Source Code Pro")
 
 ;(setq-default browse-url-browser-function 'eww-browse-url)
 (setq-default browse-url-browser-function 'browse-url-chrome)
