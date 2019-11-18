@@ -64,6 +64,9 @@
         kept-old-versions 2
         version-control t))
 
+  ;; https://github.com/scalacenter/bloop/issues/1088
+  (setq create-lockfiles nil)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
