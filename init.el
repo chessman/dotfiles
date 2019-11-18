@@ -206,6 +206,16 @@
   :diminish projectile-mode
   :config
   (projectile-mode)
+
+  (projectile-register-project-type 'bloop '(".bloop")
+                                    :compile "bloop compile root"
+                                    :test "bloop test --propagate --reporter scalac root"
+                                    :src-dir "src/main/"
+                                    :test-dir "src/test/"
+                                    :test-suffix "Spec")
+
+  (setq projectile-create-missing-test-files t)
+
   (add-to-list 'projectile-globally-ignored-directories ".bloop")
   (add-to-list 'projectile-globally-ignored-directories ".metals")
   (add-to-list 'projectile-globally-ignored-directories "ltximg"))
