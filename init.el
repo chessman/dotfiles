@@ -150,6 +150,7 @@
         helm-display-header-line nil
         helm-always-two-windows t
         helm-split-window-inside-p t ;for using helm in treemacs
+        helm-buffer-max-length 40
         ;helm-follow-mode-persistent t
         helm-M-x-fuzzy-match t)
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
