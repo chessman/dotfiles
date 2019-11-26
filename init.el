@@ -179,6 +179,7 @@
 
 (use-package helm-ag
   :config
+  (setq helm-ag-command-option "--word-regexp")
   (evil-define-key 'normal helm-ag-mode-map
     (kbd "RET") 'helm-ag-mode-jump-other-window
     "gr" 'helm-ag--update-save-results)
