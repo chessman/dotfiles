@@ -161,12 +161,12 @@
 
 (defun helm-do-ag-project-root-insert-at-point ()
   (interactive)
-  (let ((helm-ag-insert-at-point 'symbol))
+  (let ((helm-ag-command-option "--word-regexp")
+     (helm-ag-insert-at-point 'symbol))
     (helm-do-ag-project-root)))
 
 (use-package helm-ag
   :config
-  (setq helm-ag-command-option "--word-regexp")
   (evil-define-key 'normal helm-ag-mode-map
     (kbd "RET") 'helm-ag-mode-jump-other-window
     "gr" 'helm-ag--update-save-results)
