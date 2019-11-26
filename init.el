@@ -676,12 +676,7 @@ It looks for archive files in /pkg/."
 (use-package flycheck
   :diminish "F"
   :config
-  (global-flycheck-mode)
-  (add-hook 'flycheck-mode-hook 'flycheck-pos-tip-mode))
-
-(use-package flycheck-pos-tip
-  :config
-(setq flycheck-pos-tip-timeout 0))
+  (global-flycheck-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restclient
