@@ -154,6 +154,7 @@
         helm-M-x-fuzzy-match t)
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
   (evil-leader/set-key
+   "?" 'helm-resume
    "b" 'helm-mini
    "fb" 'helm-bookmarks
    "ff" 'helm-find-files)))
@@ -163,20 +164,6 @@
   (let ((helm-ag-insert-at-point 'symbol))
     (helm-do-ag-project-root)))
 
-;; from spacemacs
-(defun resume-last-search-buffer ()
-  "open last helm-ag or hgrep buffer."
-  (interactive)
-  (cond ((get-buffer "*helm ag results*")
-         (switch-to-buffer-other-window "*helm ag results*"))
-        ((get-buffer "*helm-ag*")
-         (helm-resume "*helm-ag*"))
-        ((get-buffer "*hgrep*")
-         (switch-to-buffer-other-window "*hgrep*"))
-        (t
-         (message "No previous search buffer found"))))
-
-
 (use-package helm-ag
   :config
   (setq helm-ag-command-option "--word-regexp")
@@ -184,7 +171,6 @@
     (kbd "RET") 'helm-ag-mode-jump-other-window
     "gr" 'helm-ag--update-save-results)
   (evil-leader/set-key
-    "?" 'resume-last-search-buffer
     "/" 'helm-do-ag-project-root
     "." 'helm-do-ag-project-root-insert-at-point))
 
