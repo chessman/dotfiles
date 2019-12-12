@@ -35,7 +35,7 @@
 
 (setq-default indent-tabs-mode nil)
 
-(set-frame-font "Hack")
+(set-frame-font "Hack 11")
 ;(set-frame-font "Source Code Pro")
 
 ;(setq-default browse-url-browser-function 'eww-browse-url)
@@ -351,81 +351,6 @@
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Go
-
-(defun my-go-mode-hook ()
-  ; eldoc shows the signature of the function at point in the status bar
-  (go-eldoc-setup)
-  ; Call Gofmt before saving                                                    
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  ; Godef jump key binding                                                      
-  (local-set-key (kbd "M-*") 'pop-tag-mark))
-
-(use-package go-mode
-  :config
-
-  ;; https://github.com/dominikh/go-mode.el/pull/233
-  (defun go-packages-native ()
-    "Return a list of all installed Go packages.
-It looks for archive files in /pkg/."
-    (sort
-     (delete-dups
-      (cl-mapcan
-       (lambda (pkgdir)
-         (cl-mapcan (lambda (dir)
-                      (mapcar (lambda (file)
-                                (let ((sub (substring file (length pkgdir) -2)))
-                                  (mapconcat #'identity (cdr (split-string sub "/")) "/")))
-                              (if (file-directory-p dir)
-                                  (directory-files dir t "\\.a$")
-                                (if (string-match-p "\\.a$" dir)
-                                    `(,dir)))))
-                    (if (file-directory-p pkgdir)
-                        (append (directory-files pkgdir t "\\.a$") (go--directory-dirs pkgdir)))))
-       (apply 'append
-              (mapcar (lambda (dir)
-                        (delete nil (let ((pkgdir (concat dir "/pkg")))
-                                      (mapcar (lambda (sub)
-                                                (unless (or (string-match-p
-                                                             "\\(dep\\|race\\|dyn\\|shared\\|include\\|obj\\|tool\\)"
-                                                             sub)
-                                                            (member sub '("." ".."))) (concat pkgdir "/" sub)))
-                                              (directory-files pkgdir nil nil t))))) (go-root-and-paths)))))
-     #'string<))
-
-  
-  (setq gofmt-command "goimports")
-  (add-hook 'go-mode-hook 'my-go-mode-hook))
-
-(use-package go-guru)
-
-(use-package go-rename)
-
-(use-package company-go
-  :config
-  (setq company-go-show-annotation t)
-  (setq company-go-gocode-args '("-unimported-packages" "-builtin"))
-  (add-to-list 'company-backends 'company-go))
-
-;; (use-package company-tabnine
-;;   :config
-;;   (add-to-list 'company-backends #'company-tabnine))
-
-(use-package go-stacktracer)
-
-(use-package go-direx)
-
-(use-package go-add-tags
-  :config
-  (setq go-add-tags-style 'lower-camel-case))
-
-(use-package go-impl)
-
-(use-package go-fill-struct)
-
-(use-package go-eldoc)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Docker
