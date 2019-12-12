@@ -625,11 +625,11 @@
 
 (use-package org-pomodoro)
 
-(use-package org-jira
-  :config
-  (setq request-log-level 'debug)
-  (setq request-message-level 'debug)
-  (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
+;; (use-package org-jira
+;;   :config
+;;   (setq request-log-level 'debug)
+;;   (setq request-message-level 'debug)
+;;   (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
 
 ;; guaranteed kill
 (diminish 'auto-revert-mode)
