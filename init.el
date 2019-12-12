@@ -360,26 +360,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Javascript
 
-(use-package js2-mode
-  :mode ("\\.js$" "\\.es6$")
-  :config
-  (add-hook 'js2-mode-hook
-            (lambda ()
-              (progn
-                (setq js2-basic-offset 4)
-                (setq js-switch-indent-offset 4)
-                (setq js2-strict-missing-semi-warning nil)))))
-
-(use-package js2-refactor)
-
-(use-package indium
-  :config (add-hook 'js2-mode-hook #'indium-interaction-mode))
-
-(use-package web-mode
-  :mode ("\\.tsx$" "\\.jsx$")
-  :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
-
 (use-package json-mode)
 
 (use-package elm-mode
