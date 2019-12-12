@@ -691,7 +691,6 @@ It looks for archive files in /pkg/."
   :ensure org-plus-contrib
   :config
   (require 'ox)
-  (require 'org-drill)
   (setq org-agenda-files (quote ("~/Dropbox/org/events.org"))))
 
 (use-package org-evil)
