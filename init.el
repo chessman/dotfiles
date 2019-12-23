@@ -317,14 +317,25 @@
 
 (use-package company-lsp)
 
-(add-hook 'go-mode-hook #'lsp)
-(add-hook 'scala-mode-hook #'lsp)
-
 (use-package helm-lsp)
 (use-package lsp-treemacs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Go
+
+(add-hook 'go-mode-hook #'lsp)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Java
+
+(use-package lsp-java
+  :after lsp
+  :config (add-hook 'java-mode-hook 'lsp))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
+
+(add-hook 'scala-mode-hook #'lsp)
 
 (defun complete-at-point ()
   (interactive)
