@@ -421,7 +421,8 @@
 
 ;(setq compilation-read-command nil)
 (setq compilation-scroll-output 'first-error)
-(global-set-key "\C-x\C-m" 'compile)
+(global-set-key "\C-x\C-m" 'projectile-compile-project)
+(global-set-key "\C-x\C-t" 'projectile-test-project)
 (evil-leader/set-key
   ;; "cl" 'flymake-show-diagnostics-buffer
   ;; "cn" 'flymake-goto-next-error
