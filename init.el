@@ -456,7 +456,7 @@
 
 (defmacro def-pairs (pairs)
   `(progn
-     ,@(loop for (key . val) in pairs
+     ,@(cl-loop for (key . val) in pairs
           collect
             `(defun ,(read (concat
                             "wrap-with-"
