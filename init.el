@@ -304,7 +304,9 @@
 
 (use-package lsp-mode
   :commands lsp
-  :bind ("M-/" . lsp-find-references)
+  :bind (:map global-map
+        ("M-/" . lsp-find-references)
+        ("M-RET" . helm-lsp-code-actions))
   :config
   (setq lsp-prefer-flymake nil)
   (evil-leader/set-key
@@ -340,17 +342,8 @@
 
 (add-hook 'scala-mode-hook #'lsp)
 
-(defun complete-at-point ()
-  (interactive)
-  (evil-forward-word-end)
-  (evil-append 1)
-  (company-complete))
-
 (use-package scala-mode
-  :mode "^\w+\\.s\\(cala\\|bt\\)$"
-  :bind
-  (:map scala-mode-map
-        ("M-RET" . complete-at-point)))
+  :mode "^\w+\\.s\\(cala\\|bt\\)$")
 
 (add-hook 'scala-mode-hook (lambda ()
                              (setq prettify-symbols-alist scala-prettify-symbols-alist)
