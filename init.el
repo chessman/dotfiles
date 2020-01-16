@@ -22,6 +22,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Striping & Defaults
 (setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (setq inhibit-startup-screen t)
 
