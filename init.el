@@ -328,8 +328,6 @@
   ;(setq lsp-ui-doc-position 'at-point)
   (setq lsp-ui-doc-alignment 'window))
 
-(use-package company-lsp)
-
 (use-package helm-lsp)
 (use-package lsp-treemacs)
 
@@ -377,9 +375,7 @@
 
 (use-package json-mode)
 
-(use-package elm-mode
-  :config
-(add-to-list 'company-backends 'company-elm))
+(use-package elm-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Magit
