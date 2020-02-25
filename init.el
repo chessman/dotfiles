@@ -74,14 +74,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
 
-(use-package molokai-theme
-  :config
-  ;(load-theme 'molokai t)
-  )
+(use-package molokai-theme)
+(use-package badwolf-theme)
+(use-package gruvbox-theme)
 
-(use-package badwolf-theme
-  :config
-  (load-theme 'badwolf t))
+(load-theme 'badwolf t)
 
 ;(use-package solarized-theme
 ;  :init
