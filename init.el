@@ -302,13 +302,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 
+(use-package which-key
+  :config (which-key-mode))
+
 (use-package lsp-mode
   :commands lsp
+  :init
+  (setq lsp-keymap-prefix "C-l")
+  :hook
+  (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
         ("M-/" . lsp-find-references)
         ("M-RET" . helm-lsp-code-actions))
   :config
   (setq lsp-prefer-flymake nil)
+  (setq lsp-restart 'ignore)
   (evil-leader/set-key
     "ss" 'helm-lsp-global-workspace-symbol
     "te" 'lsp-treemacs-errors-list
