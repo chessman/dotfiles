@@ -310,9 +310,9 @@
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
         ("M-/" . lsp-find-references)
+        ("M-\\" . lsp-find-implementation)
         ("M-RET" . helm-lsp-code-actions))
   :config
-  (setq lsp-prefer-flymake nil)
   (setq lsp-restart 'ignore)
   (evil-leader/set-key
     "ss" 'helm-lsp-global-workspace-symbol
