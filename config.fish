@@ -6,3 +6,4 @@ set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 set -gx GOPATH ~/gocode
 
 
+starship init fish | source

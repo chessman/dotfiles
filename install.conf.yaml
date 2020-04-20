@@ -19,3 +19,4 @@
 
 - shell:
   - mkdir -p ~/.config/i3/lock-images
+  - curl -fsSL https://starship.rs/install.sh | env BIN_DIR=~/bin FORCE=y bash
