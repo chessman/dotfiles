@@ -315,6 +315,7 @@
         ("M-RET" . helm-lsp-code-actions))
   :config
   (setq lsp-restart 'ignore)
+  (setq lsp-lens-auto-enable t)
   (evil-leader/set-key
     "ss" 'helm-lsp-global-workspace-symbol
     "te" 'lsp-treemacs-errors-list
