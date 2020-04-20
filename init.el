@@ -168,6 +168,7 @@
 
 (use-package helm-ag
   :config
+  (setq helm-ag-base-command "rg --no-heading --sort path --smart-case")
   (evil-define-key 'normal helm-ag-mode-map
     (kbd "RET") 'helm-ag-mode-jump-other-window
     "gr" 'helm-ag--update-save-results)
