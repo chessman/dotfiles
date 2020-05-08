@@ -440,6 +440,8 @@
 ;; Windows
 
 (evil-leader/set-key
+  "SPC" 'evil-window-next
+  "wd" 'evil-window-delete
   "wh" 'evil-window-left
   "wl" 'evil-window-right
   "wj" 'evil-window-down
