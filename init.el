@@ -381,6 +381,7 @@
 
 (use-package magit
   :config (evil-leader/set-key
+    "g f" 'magit-file-dispatch
     "g s" 'magit-status))
 
 (use-package forge)
