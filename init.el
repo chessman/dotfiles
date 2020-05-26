@@ -311,14 +311,16 @@
   :hook
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
-        ("M-/" . lsp-find-references)
-        ("M-\\" . lsp-find-implementation)
+        ;("M-/" . lsp-find-references)
+        ("M-/" . lsp-ui-peek-find-references)
+        ;("M-\\" . lsp-find-implementation)
+        ("M-\\" . lsp-ui-peek-find-implementation)
         ("M-RET" . helm-lsp-code-actions))
   :config
   (setq lsp-restart 'ignore)
   (setq lsp-lens-auto-enable t)
   (evil-leader/set-key
-    "ss" 'helm-lsp-global-workspace-symbol
+    "ss" 'helm-lsp-workspace-symbol
     "te" 'lsp-treemacs-errors-list
     "ts" 'lsp-treemacs-symbols))
 
