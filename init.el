@@ -276,6 +276,8 @@
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024))
   :hook
+  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
         ;("M-/" . lsp-find-references)
@@ -285,7 +287,7 @@
         ("M-RET" . helm-lsp-code-actions))
   :config
   (setq lsp-restart 'ignore)
-  (setq lsp-lens-auto-enable t)
+  (setq lsp-lens-enable t)
   (evil-leader/set-key
     "ss" 'helm-lsp-workspace-symbol
     "te" 'lsp-treemacs-errors-list
@@ -297,8 +299,26 @@
   ;(setq lsp-ui-doc-position 'at-point)
   (setq lsp-ui-doc-alignment 'window))
 
+(use-package lsp-metals
+  :config
+  (setq lsp-metals-treeview-show-when-views-received t))
+
 (use-package helm-lsp)
 (use-package lsp-treemacs)
+
+;; Use the Debug Adapter Protocol for running tests and debugging
+(use-package posframe
+  ;; Posframe is a pop-up tool that must be manually installed for dap-mode
+)
+
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+  ;; :config
+  ;;    (add-hook 'dap-stopped-hook
+  ;;      (lambda (arg) (call-interactively #'dap-hydra))))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
@@ -315,10 +335,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
 
-(add-hook 'scala-mode-hook #'lsp)
-
 (use-package scala-mode
-  :mode "^\w+\\.s\\(cala\\|bt\\)$")
+  :interpreter ("scala" . scala-mode))
 
 ;(add-hook 'scala-mode-hook (lambda ()
 ;                             (setq prettify-symbols-alist scala-prettify-symbols-alist)
