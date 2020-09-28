@@ -126,10 +126,7 @@
 
 (use-package evil-collection
   :config
-  (evil-collection-init 'xref))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Helm
+  (evil-collection-init '(xref vterm)))
 
 ; show only header
 (defun helm-hide-minibuffer-maybe ()
