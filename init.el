@@ -36,6 +36,8 @@
 (blink-cursor-mode 0)
 (fset `yes-or-no-p `y-or-n-p)
 
+(setq history-delete-duplicates t)
+
 (setq-default indent-tabs-mode nil)
 
 (set-frame-font "FiraCode 11")
