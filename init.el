@@ -272,6 +272,9 @@
   :commands lsp
   :init
   (setq lsp-keymap-prefix "C-l")
+  ; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
   :hook
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
