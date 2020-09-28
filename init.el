@@ -632,6 +632,17 @@
 (use-package protobuf-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Kubernetes
+
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+
+(use-package kubernetes-evil
+  :ensure t
+  :after kubernetes)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Yaml
 
 (use-package yaml-mode
