@@ -655,6 +655,13 @@
 (use-package vterm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Terraform
+
+(use-package terraform-mode
+  :config
+  (add-hook 'terraform-mode-hook #'lsp))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org
 
 (setq-default org-startup-indented t)
