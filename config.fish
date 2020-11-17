@@ -6,4 +6,6 @@ set -gx PATH ~/.gem/ruby/2.7.0/bin $PATH
 set -gx PATH ~/.local/bin $PATH
 set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 
+set -gx PAGER /home/ea/bin/slit
+
 starship init fish | source
