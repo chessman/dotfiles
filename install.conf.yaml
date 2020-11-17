@@ -18,6 +18,10 @@
     ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/kitty/kitty.conf: kitty.conf
 
+- create:
+  - ~/.config/i3/lock-images
+
 - shell:
-  - mkdir -p ~/.config/i3/lock-images
   - curl -fsSL https://starship.rs/install.sh | env BIN_DIR=~/bin FORCE=y bash
+  - curl -L https://github.com/tigrawap/slit/releases/latest/download/slit_linux_amd64 -o ~/bin/slit
+  - chmod a+x ~/bin/slit
