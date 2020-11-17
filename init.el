@@ -110,6 +110,7 @@
 
 (use-package evil
   :config
+  (setq evil-undo-system 'undo-redo)
   (evil-mode 1)
   (define-key evil-normal-state-map (kbd "M-.") nil)
   (define-key evil-normal-state-map (kbd "<XF86Tools>") 'evil-insert)
