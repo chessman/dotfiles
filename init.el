@@ -302,7 +302,9 @@
 
 (use-package lsp-metals
   :config
-  (setq lsp-metals-treeview-show-when-views-received t))
+  (setq lsp-metals-show-implicit-arguments nil)
+  (setq lsp-metals-show-inferred-type nil)
+  (setq lsp-metals-treeview-show-when-views-received nil))
 
 (use-package helm-lsp)
 (use-package lsp-treemacs)
