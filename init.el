@@ -70,6 +70,7 @@
         kept-old-versions 2
         version-control t))
 
+  (global-undo-tree-mode)
   ;; https://github.com/scalacenter/bloop/issues/1088
   (setq create-lockfiles nil)
 
@@ -110,7 +111,7 @@
 
 (use-package evil
   :config
-  (setq evil-undo-system 'undo-redo)
+  (setq evil-undo-system 'undo-tree)
   (evil-mode 1)
   (define-key evil-normal-state-map (kbd "M-.") nil)
   (define-key evil-normal-state-map (kbd "<XF86Tools>") 'evil-insert)
