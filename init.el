@@ -128,7 +128,7 @@
 
 (use-package evil-collection
   :config
-  (evil-collection-init '(xref vterm)))
+  (evil-collection-init '(xref vterm magit)))
 
 ; show only header
 (defun helm-hide-minibuffer-maybe ()
@@ -377,7 +377,6 @@
     "g s" 'magit-status))
 
 (use-package forge)
-(use-package evil-magit)
 
 (setq-default ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq-default ediff-prefer-iconified-control-frame t)
