@@ -55,6 +55,13 @@
 ;; word boundaries
 (modify-syntax-entry ?_ "w")
 
+(setq delete-old-versions t
+      backup-directory-alist `(("." . "~/.emacs.d/saves"))
+      backup-by-copying t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup & Undo
 
@@ -63,13 +70,6 @@
   :config
   (setq undo-tree-auto-save-history t)
   (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
-  (setq delete-old-versions t
-        backup-directory-alist `(("." . "~/.emacs.d/saves"))
-        backup-by-copying t
-        kept-new-versions 6
-        kept-old-versions 2
-        version-control t))
-
   (global-undo-tree-mode)
   ;; https://github.com/scalacenter/bloop/issues/1088
   (setq create-lockfiles nil)
