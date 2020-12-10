@@ -9,3 +9,5 @@ set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 set -gx PAGER /home/ea/bin/slit
 
 starship init fish | source
+
+alias ls exa
