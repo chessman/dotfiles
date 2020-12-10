@@ -22,6 +22,9 @@ set modeline
 
 set hidden
 
+set ignorecase
+set smartcase
+
 set laststatus=2
 
 set hlsearch            " Highlight
