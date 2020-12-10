@@ -65,12 +65,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup & Undo
 
-(use-package undo-tree
-  :diminish
-  :config
-  (setq undo-tree-auto-save-history t)
-  (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
-  (global-undo-tree-mode)
+;; (use-package undo-tree
+;;   :diminish
+;;   :config
+;;   (setq undo-tree-auto-save-history t)
+;;   (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
+;;   ;(setq undo-tree-enable-undo-in-region nil)
+;;   (global-undo-tree-mode))
+
   ;; https://github.com/scalacenter/bloop/issues/1088
   (setq create-lockfiles nil)
 
@@ -111,8 +113,8 @@
 
 (use-package evil
   :config
-  (setq evil-undo-system 'undo-tree)
   (evil-mode 1)
+  (evil-set-undo-system 'undo-redo)
   (define-key evil-normal-state-map (kbd "M-.") nil)
   (define-key evil-normal-state-map (kbd "<XF86Tools>") 'evil-insert)
   (define-key evil-insert-state-map (kbd "<XF86Tools>") 'evil-force-normal-state))
