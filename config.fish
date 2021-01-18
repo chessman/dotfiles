@@ -8,6 +8,8 @@ set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 
 set -gx PAGER /home/ea/bin/slit
 
+set -gx RIPGREP_CONFIG_PATH /home/ea/.dotfiles/ripgreprc
+
 starship init fish | source
 
 alias ls exa
