@@ -52,6 +52,9 @@
 (setq-default fill-column 100)
 (auto-fill-mode)
 
+;(global-display-line-numbers-mode)
+;(setq display-line-numbers-type 'relative)
+
 ;; word boundaries
 (modify-syntax-entry ?_ "w")
 
