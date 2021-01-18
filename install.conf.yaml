@@ -29,3 +29,5 @@
   - mv /tmp/btm ~/bin
   - mv /tmp/completion/btm.fish ~/.config/fish/completions/
   - rm -rf /tmp/completion
+  - curl -L https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-linux-amd64 -o ~/bin/kind
+  - chmod a+x ~/bin/kind
