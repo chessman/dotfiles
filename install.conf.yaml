@@ -10,13 +10,14 @@
     ~/.inputrc: inputrc
     ~/.emacs.d/init.el: init.el
     ~/.vimrc: vimrc
-    ~/.config/nvim/init.vim: vimrc
+    ~/.config/nvim/init.vim: init.vim
     ~/.config/i3/config: i3.conf
     ~/.config/i3status/config: i3status.conf
     ~/bin/update-go-tools: update-go-tools
     ~/.config/fish/config.fish: config.fish
     ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/kitty/kitty.conf: kitty.conf
+    ~/.SpaceVim.d/init.toml: SpaceVim.d/init.toml
 
 - create:
   - ~/.config/i3/lock-images
