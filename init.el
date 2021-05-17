@@ -68,13 +68,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup & Undo
 
-;; (use-package undo-tree
-;;   :diminish
-;;   :config
-;;   (setq undo-tree-auto-save-history t)
-;;   (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
-;;   ;(setq undo-tree-enable-undo-in-region nil)
-;;   (global-undo-tree-mode))
+(use-package undo-tree
+  :diminish
+  :config
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist `(("." . "~/.emacs.d/undotree")))
+  ;(setq undo-tree-enable-undo-in-region nil)
+  (global-undo-tree-mode))
 
   ;; https://github.com/scalacenter/bloop/issues/1088
   (setq create-lockfiles nil)
@@ -112,17 +112,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evil
 
-(setq evil-want-keybinding nil)
-
 (use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  :bind (:map evil-normal-state-map
+              ("M-." . nil))
   :config
   (evil-mode 1)
-  (evil-set-undo-system 'undo-redo)
-  (define-key evil-normal-state-map (kbd "M-.") nil)
-  (define-key evil-normal-state-map (kbd "<XF86Tools>") 'evil-insert)
-  (define-key evil-insert-state-map (kbd "<XF86Tools>") 'evil-force-normal-state))
+  (evil-set-undo-system 'undo-tree))
 
 (use-package evil-leader
+  :after evil
   :config
   (progn
     (evil-leader/set-leader "SPC")
@@ -132,8 +132,12 @@
     (kill-buffer "*Messages*")))
 
 (use-package evil-collection
+  :after evil
   :config
   (evil-collection-init '(xref vterm magit)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helm
 
 ; show only header
 (defun helm-hide-minibuffer-maybe ()
@@ -150,7 +154,10 @@
   (progn
     (require 'helm-config)
     (helm-mode))
-  :bind ("M-x" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
+         (:map helm-buffer-map
+           ("C-M-s-n" . helm-next-line)
+           ("C-M-s-p" . helm-previous-line)))
   :config
   (progn
   (setq helm-echo-input-in-header-line t
@@ -303,14 +310,14 @@
 (use-package lsp-ui
   :config
   (setq lsp-ui-doc-position 'top)
+  (setq lsp-ui-sideline-diagnostic-max-lines 10)
   ;(setq lsp-ui-doc-position 'at-point)
   (setq lsp-ui-doc-alignment 'window))
 
 (use-package lsp-metals
   :config
   (setq lsp-metals-show-implicit-arguments nil)
-  (setq lsp-metals-show-inferred-type nil)
-  (setq lsp-metals-treeview-show-when-views-received nil))
+  (setq lsp-metals-show-inferred-type nil))
 
 (use-package helm-lsp)
 (use-package lsp-treemacs)
@@ -562,6 +569,11 @@
 
 (use-package company
   :diminish
+  :bind (:map company-active-map
+        ("C-n" . company-select-next)
+        ("C-p" . company-select-previous)
+        ("C-M-s-n" . company-select-next)
+        ("C-M-s-p" . company-select-previous))
   :config
   ; http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text
   (setq company-dabbrev-downcase nil)
@@ -683,18 +695,38 @@
   (require 'ox)
   (setq org-agenda-files (quote ("~/Dropbox/org/events.org"))))
 
-(use-package org-evil)
+;;(use-package org-evil)
 
 ;; this package maps too much (J, for instance)
 ;(use-package evil-org)
 
 (use-package org-pomodoro)
 
-(use-package org-jira
-  :config
-  (setq request-log-level 'debug)
-  (setq request-message-level 'debug)
-  (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
+;; (use-package org-jira
+;;   :config
+;;   (setq request-log-level 'debug)
+;;   (setq request-message-level 'debug)
+;;   (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
+
+(defun normal-state-and-save ()
+  (interactive)
+  (evil-force-normal-state)
+  (save-buffer))
+
+; Ergodox
+(global-set-key (kbd "C-M-s-c") 'projectile-compile-project)
+(global-set-key (kbd "C-M-s-l") 'evil-window-right)
+(global-set-key (kbd "C-M-s-h") 'evil-window-left)
+(global-set-key (kbd "C-M-s-<") 'xref-pop-marker-stack)
+(global-set-key (kbd "C-M-s->") 'xref-find-definitions)
+(global-set-key (kbd "C-M-s-s") 'normal-state-and-save)
+(global-set-key (kbd "C-M-s-b") 'helm-mini)
+(global-set-key (kbd "C-M-s-u") 'sp-unwrap-sexp)
+(global-set-key (kbd "C-M-s-r") 'lsp-rename)
+(global-set-key (kbd "C-M-s-f") 'helm-lsp-code-actions)
+(global-set-key (kbd "C-M-s-e") 'next-error)
+(global-set-key (kbd "C-M-s-:") 'comment-dwim)
+(global-set-key (kbd "C-M-s-m") 'magit-status)
 
 ;; guaranteed kill
 (diminish 'auto-revert-mode)
