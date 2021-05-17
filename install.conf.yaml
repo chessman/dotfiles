@@ -18,6 +18,7 @@
     ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/kitty/kitty.conf: kitty.conf
     ~/.SpaceVim.d/init.toml: SpaceVim.d/init.toml
+    ~/.config/starship.toml: starship.toml
 
 - create:
   - ~/.config/i3/lock-images
