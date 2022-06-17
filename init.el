@@ -2,22 +2,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Init use-package
 
-(require 'package)
-(setq
- use-package-always-ensure t
- package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                    ("org" . "https://orgmode.org/elpa/")
-                    ("melpa" . "https://melpa.org/packages/")
-                    ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(when (not package-archive-contents)
-  ;(package-refresh-contents)
-  (package-initialize)
-  (package-install 'use-package))
+(setq straight-use-package-by-default t)
+(setq straight-host-usernames '((github . "chessman")))
+(setq straight-vc-git-force-protocol t)
 
-(eval-when-compile
-  (require 'use-package))
-(require 'bind-key)
+(straight-use-package 'use-package)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Striping & Defaults
@@ -103,11 +105,15 @@
   :config
   (diminish 'eldoc-mode))
 
-(use-package smart-mode-line
-  :config
-  (setq sml/no-confirm-load-theme t)
-  (setq sml/pre-minor-modes-separator " ")
-  (sml/setup))
+;; (use-package smart-mode-line
+;;   :config
+;;   (setq sml/no-confirm-load-theme t)
+;;   (setq sml/pre-minor-modes-separator " ")
+;;   (sml/setup))
+
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evil
@@ -119,6 +125,7 @@
               ("M-." . nil))
   :config
   (evil-mode 1)
+  (evil-select-search-module 'evil-search-module 'evil-search)
   (evil-set-undo-system 'undo-tree))
 
 (use-package evil-leader
@@ -134,7 +141,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init '(xref vterm magit)))
+  (evil-collection-init '(xref vterm magit edebug dired)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm
@@ -285,12 +292,14 @@
 (use-package lsp-mode
   :commands lsp
   :init
+  (setq lsp-terraform-server '("terraform-ls" "serve"))
   (setq lsp-keymap-prefix "C-l")
   ; https://emacs-lsp.github.io/lsp-mode/page/performance/
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024))
   :hook
   (scala-mode . lsp)
+  (clojure-mode . lsp)
   (lsp-mode . lsp-lens-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
@@ -320,7 +329,9 @@
   (setq lsp-metals-show-inferred-type nil))
 
 (use-package helm-lsp)
-(use-package lsp-treemacs)
+(use-package lsp-treemacs
+  :config
+  (lsp-treemacs-sync-mode 1))
 
 ;; Use the Debug Adapter Protocol for running tests and debugging
 (use-package posframe
@@ -339,6 +350,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
 
+(use-package go-mode)
 (add-hook 'go-mode-hook #'lsp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -352,7 +364,7 @@
 ;; Scala
 
 (use-package scala-mode
-  :interpreter ("scala" . scala-mode))
+  :mode ("\\.\\(scala\\|sbt\\|worksheet\\.sc\\|sc\\)\\'" . scala-mode))
 
 ;(add-hook 'scala-mode-hook (lambda ()
 ;                             (setq prettify-symbols-alist scala-prettify-symbols-alist)
@@ -367,6 +379,11 @@
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure
+
+(use-package clojure-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Docker
@@ -465,6 +482,8 @@
 
 ;(setq compilation-read-command nil)
 (setq compilation-scroll-output 'first-error)
+(setq compilation-skip-threshold 2)
+(setq compilation-auto-jump-to-first-error t)
 (global-set-key "\C-x\C-m" 'projectile-compile-project)
 (global-set-key "\C-x\C-t" 'projectile-test-project)
 (evil-leader/set-key
@@ -474,6 +493,15 @@
   "cc" 'compile-noask
   "cr" 'recompile
   "ce" 'next-error)
+
+;; regexp to match bloop output. without it, 'ant' regexp is used.  it works fine but doesn't support
+;; separating warnings and column numbers.
+;; note: ansi-color handles escape color sequences so that this matcher doesn't need to care about it.
+;; why it is needed in modern LSP environment. there are two alternatives:
+;; lsp-treemacs-errors-list - great UI but doesn't provide next-error.
+;; flycheck-list-errors - good UI but lsp-mode notifies it only about errors of the current buffer.
+(add-to-list 'compilation-error-regexp-alist-alist '(bloop "^\\[\\(?:\\(W\\)\\|E\\)\\] +\\[E[0-9]+\\] +\\([^: \t\n]+\\):\\([0-9]+\\):\\([0-9]+\\)$" 2 3 4 (1)))
+  (add-to-list 'compilation-error-regexp-alist 'bloop)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; F-keys
@@ -634,12 +662,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restclient
 
-(use-package restclient)
-(use-package ob-restclient
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((restclient . t))))
+(use-package jq-mode)
+
+(use-package restclient
+  :straight `(restclient :type git :host github :files ("restclient.el" "restclient-jq.el" "restclient-helm.el") :repo "pashky/restclient.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Multitran
@@ -684,18 +710,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org
 
-(setq-default org-startup-indented t)
-(setq-default org-src-fontify-natively t)
-
-(setq org-preview-latex-default-process 'dvisvgm)
-
 (use-package org
   :ensure org-plus-contrib
+  :init
+    (setq org-startup-indented t)
+    (setq org-startup-folded t)
+    (setq org-src-fontify-natively t)
   :config
-  (require 'ox)
-  (setq org-agenda-files (quote ("~/Dropbox/org/events.org"))))
+  (setq org-preview-latex-default-process 'dvisvgm))
 
-;;(use-package org-evil)
+;(use-package org-evil)
 
 ;; this package maps too much (J, for instance)
 ;(use-package evil-org)
@@ -717,7 +741,7 @@
 (global-set-key (kbd "C-M-s-c") 'projectile-compile-project)
 (global-set-key (kbd "C-M-s-l") 'evil-window-right)
 (global-set-key (kbd "C-M-s-h") 'evil-window-left)
-(global-set-key (kbd "C-M-s-<") 'xref-pop-marker-stack)
+(global-set-key (kbd "C-M-s-<") 'xref-go-back)
 (global-set-key (kbd "C-M-s->") 'xref-find-definitions)
 (global-set-key (kbd "C-M-s-s") 'normal-state-and-save)
 (global-set-key (kbd "C-M-s-b") 'helm-mini)
@@ -727,6 +751,7 @@
 (global-set-key (kbd "C-M-s-e") 'next-error)
 (global-set-key (kbd "C-M-s-:") 'comment-dwim)
 (global-set-key (kbd "C-M-s-m") 'magit-status)
+(global-set-key (kbd "C-M-s-o") 'lsp-extend-selection)
 
 ;; guaranteed kill
 (diminish 'auto-revert-mode)
