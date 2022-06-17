@@ -1,0 +1,9 @@
+#! /bin/bash
+
+if ! command -v i3lock >/dev/null 2>&1; then
+  cmd=swaylock
+else
+  cmd=i3lock
+fi
+
+$cmd -i `ls /home/ea/.config/i3/lock-images/* | shuf | head -n 1`
