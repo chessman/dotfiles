@@ -24,7 +24,7 @@
   - ~/.config/i3/lock-images
 
 - shell:
-  - curl -fsSL https://starship.rs/install.sh | env BIN_DIR=~/bin FORCE=y bash
+  - curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/bin FORCE=y sh
   - curl -L https://github.com/tigrawap/slit/releases/latest/download/slit_linux_amd64 -o ~/bin/slit
   - chmod a+x ~/bin/slit
   - curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz --output - | tar zxf - -C /tmp/
