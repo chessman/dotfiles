@@ -2,10 +2,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Init use-package
 
+(setq straight-repository-branch "develop")
+(setq straight-use-package-by-default t)
+(setq straight-host-usernames '((github . "chessman")))
+(setq straight-vc-git-force-protocol t)
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
@@ -14,10 +19,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
-(setq straight-use-package-by-default t)
-(setq straight-host-usernames '((github . "chessman")))
-(setq straight-vc-git-force-protocol t)
 
 (straight-use-package 'use-package)
 
@@ -67,6 +68,22 @@
       kept-old-versions 2
       version-control t)
 
+;; https://www.emacswiki.org/emacs/CopyAndPaste 
+;; (setq wl-copy-process nil)
+;; (defun wl-copy (text)
+;;   (setq wl-copy-process (make-process :name "wl-copy"
+;;                                       :buffer nil
+;;                                       :command '("wl-copy" "-f" "-n")
+;;                                       :connection-type 'pipe))
+;;   (process-send-string wl-copy-process text)
+;;   (process-send-eof wl-copy-process))
+;; (defun wl-paste ()
+;;   (if (and wl-copy-process (process-live-p wl-copy-process))
+;;       nil ; should return nil if we're the current paste owner
+;;       (shell-command-to-string "wl-paste -n")))
+;; (setq interprogram-cut-function 'wl-copy)
+;; (setq interprogram-paste-function 'wl-paste)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Backup & Undo
 
@@ -99,6 +116,42 @@
 ;  (load-theme 'solarized-dark t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org
+
+(use-package org
+ :init
+   (setq org-startup-indented t)
+   (setq org-startup-folded t)
+   (setq org-src-fontify-natively t)
+ :config
+ (setq org-preview-latex-default-process 'dvisvgm))
+
+(use-package anki-editor)
+
+;(use-package org-evil)
+
+;; this package maps too much (J, for instance)
+;(use-package evil-org)
+
+(use-package org-pomodoro
+  :config
+  (setq alert-default-style 'notifications
+        org-pomodoro-audio-player (executable-find "cvlc")
+        org-pomodoro-start-sound-args "--play-and-exit"
+        org-pomodoro-finished-sound-args "--play-and-exit"
+        org-pomodoro-overtime-sound-args "--play-and-exit"
+        org-pomodoro-killed-sound-args "--play-and-exit"
+        org-pomodoro-short-break-sound-args "--play-and-exit"
+        org-pomodoro-long-break-sound-args "--play-and-exit"
+        org-pomodoro-ticking-sound-args "--play-and-exit"))
+
+;; (use-package org-jira
+;;   :config
+;;   (setq request-log-level 'debug)
+;;   (setq request-message-level 'debug)
+;;   (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Modeline
 
 (use-package diminish
@@ -112,7 +165,6 @@
 ;;   (sml/setup))
 
 (use-package doom-modeline
-  :ensure t
   :init (doom-modeline-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,8 +175,7 @@
   (setq evil-want-keybinding nil)
   :bind (:map evil-normal-state-map
               ("M-." . nil))
-  :config
-  (evil-mode 1)
+  :config (evil-mode 1)
   (evil-select-search-module 'evil-search-module 'evil-search)
   (evil-set-undo-system 'undo-tree))
 
@@ -157,10 +208,7 @@
 
 (use-package helm
   :diminish helm-mode
-  :init
-  (progn
-    (require 'helm-config)
-    (helm-mode))
+  :init (helm-mode)
   :bind (("M-x" . helm-M-x)
          (:map helm-buffer-map
            ("C-M-s-n" . helm-next-line)
@@ -173,6 +221,7 @@
         helm-split-window-inside-p t ;for using helm in treemacs
         helm-buffer-max-length 40
         ;helm-follow-mode-persistent t
+        helm-move-to-line-cycle-in-source nil
         helm-M-x-fuzzy-match t)
   (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
   (evil-leader/set-key
@@ -236,14 +285,11 @@
 ;; Treemacs
 
 (use-package treemacs
-  :ensure t
   :defer t
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
   :config
-  (progn
-
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
     (treemacs-fringe-indicator-mode t)
@@ -257,7 +303,7 @@
   (evil-leader/set-key
     "tt" 'treemacs
     "tb" 'treemacs-bookmark
-    "tf" 'treemacs-find-file))
+    "tf" 'treemacs-find-file)
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
@@ -300,6 +346,7 @@
   :hook
   (scala-mode . lsp)
   (clojure-mode . lsp)
+  (python-mode . lsp)
   (lsp-mode . lsp-lens-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
@@ -325,6 +372,8 @@
 
 (use-package lsp-metals
   :config
+  ;(setq lsp-metals-java-home "/usr/lib/jvm/java-11-openjdk-amd64/")
+  (setq lsp-metals-server-args '("-Xmx1G" "-XX:+UseG1GC" "-XX:+UseStringDeduplication"))
   (setq lsp-metals-show-implicit-arguments nil)
   (setq lsp-metals-show-inferred-type nil))
 
@@ -403,7 +452,9 @@
 (use-package magit
   :config (evil-leader/set-key
     "g f" 'magit-file-dispatch
-    "g s" 'magit-status))
+    "g s" 'magit-status
+    "g l" 'magit-log-buffer-file
+    "g d" 'magit-diff-buffer-file))
 
 (use-package forge)
 
@@ -449,11 +500,11 @@
       (put face 'theme-face nil)
       (put face 'face-alias alias)))))
 
-(use-package git-timemachine
-  :config
-  (evil-make-overriding-map git-timemachine-mode-map 'normal)
-  ;; force update evil keymaps after git-timemachine-mode loaded
-  (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))
+;; (use-package git-timemachine
+;;   :config
+;;   (evil-make-overriding-map git-timemachine-mode-map 'normal)
+;;   ;; force update evil keymaps after git-timemachine-mode loaded
+;;   (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -681,11 +732,9 @@
 ;; Kubernetes
 
 (use-package kubernetes
-  :ensure t
   :commands (kubernetes-overview))
 
 (use-package kubernetes-evil
-  :ensure t
   :after kubernetes)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -693,7 +742,8 @@
 
 (use-package yaml-mode
   :config
-  (add-hook 'yaml-mode-hook #'lsp))
+  ;(add-hook 'yaml-mode-hook #'lsp)
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Terminal
@@ -707,51 +757,52 @@
   :config
   (add-hook 'terraform-mode-hook #'lsp))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org
-
-(use-package org
-  :ensure org-plus-contrib
-  :init
-    (setq org-startup-indented t)
-    (setq org-startup-folded t)
-    (setq org-src-fontify-natively t)
-  :config
-  (setq org-preview-latex-default-process 'dvisvgm))
-
-;(use-package org-evil)
-
-;; this package maps too much (J, for instance)
-;(use-package evil-org)
-
-(use-package org-pomodoro)
-
-;; (use-package org-jira
-;;   :config
-;;   (setq request-log-level 'debug)
-;;   (setq request-message-level 'debug)
-;;   (setq jiralib-url "https://intertrusttechnologies.atlassian.net"))
-
 (defun normal-state-and-save ()
   (interactive)
   (evil-force-normal-state)
   (save-buffer))
 
-; Ergodox
-(global-set-key (kbd "C-M-s-c") 'projectile-compile-project)
-(global-set-key (kbd "C-M-s-l") 'evil-window-right)
-(global-set-key (kbd "C-M-s-h") 'evil-window-left)
-(global-set-key (kbd "C-M-s-<") 'xref-go-back)
-(global-set-key (kbd "C-M-s->") 'xref-find-definitions)
-(global-set-key (kbd "C-M-s-s") 'normal-state-and-save)
-(global-set-key (kbd "C-M-s-b") 'helm-mini)
-(global-set-key (kbd "C-M-s-u") 'sp-unwrap-sexp)
-(global-set-key (kbd "C-M-s-r") 'lsp-rename)
-(global-set-key (kbd "C-M-s-f") 'helm-lsp-code-actions)
-(global-set-key (kbd "C-M-s-e") 'next-error)
-(global-set-key (kbd "C-M-s-:") 'comment-dwim)
-(global-set-key (kbd "C-M-s-m") 'magit-status)
-(global-set-key (kbd "C-M-s-o") 'lsp-extend-selection)
+(defun ergodox-keys ()
+  ; Ergodox
+  (global-set-key (kbd "C-M-s-c") 'projectile-compile-project)
+  (global-set-key (kbd "C-M-s-l") 'evil-window-right)
+  (global-set-key (kbd "C-M-s-h") 'evil-window-left)
+  (global-set-key (kbd "C-M-s-<") 'xref-go-back)
+  (global-set-key (kbd "C-M-s->") 'xref-find-definitions)
+  (global-set-key (kbd "C-M-s-s") 'normal-state-and-save)
+  (global-set-key (kbd "C-M-s-b") 'helm-mini)
+  (global-set-key (kbd "C-M-s-u") 'sp-unwrap-sexp)
+  (global-set-key (kbd "C-M-s-r") 'lsp-rename)
+  (global-set-key (kbd "C-M-s-f") 'helm-lsp-code-actions)
+  (global-set-key (kbd "C-M-s-e") 'next-error)
+  (global-set-key (kbd "C-M-s-:") 'comment-dwim)
+  (global-set-key (kbd "C-M-s-m") 'magit-status)
+  (global-set-key (kbd "C-M-s-o") 'lsp-extend-selection))
+
+(ergodox-keys)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dirvish
+
+(straight-use-package 'dirvish
+  :config
+  ;(dirvish-override-dired-mode)
+  )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Misc
+
+;; based on http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+            (progn
+              (delete-file filename)
+              (message "Deleted file %s." filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
 
 ;; guaranteed kill
 (diminish 'auto-revert-mode)

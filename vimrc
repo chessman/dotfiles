@@ -66,86 +66,88 @@ else
 endif
 
 "------------------------------------------------------------------------
-" Vundle
+" vim-plug
 "------------------------------------------------------------------------
-set nocompatible
-filetype off
-let s:vundle_path = s:editor_root . '/bundle/Vundle.vim'
-let &rtp = &rtp . ',' . s:vundle_path
-call vundle#begin(s:editor_root . '/bundle')
+"
+""
+" Install vim-plug if not found
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-Plugin 'VundleVim/Vundle.vim'
+"" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
 
-Plugin 'Gundo'
-Plugin 'octave.vim--'
-Plugin 'vcscommand.vim'
+call plug#begin()
 
 "Clojure
-"Plugin 'tpope/vim-leiningen'
-"Plugin 'tpope/vim-classpath'
-Plugin 'tpope/vim-fireplace'
-Plugin 'tpope/vim-dispatch'
-Plugin 'guns/vim-clojure-static'
-Plugin 'guns/vim-clojure-highlight'
-Plugin 'paredit.vim'
-
-Plugin 'Shougo/vimproc'
-Plugin 'Shougo/neocomplete'
-Plugin 'Shougo/unite.vim'
-Plugin 'bling/vim-airline'
-Plugin 'bling/vim-bufferline'
-Plugin 'int3/vim-taglist-plus'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-Plugin 'mhinz/vim-startify.git'
-Plugin 'Raimondi/delimitMate'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'freitass/todo.txt-vim'
-Plugin 'kshenoy/vim-signature'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-
-Plugin 'derekwyatt/vim-scala'
-"Plugin 'ensime/ensime-vim'
-Plugin 'dscleaver/sbt-quickfix'
-Plugin 'solarnz/thrift.vim'
-
-Plugin 'pangloss/vim-javascript'
-Plugin 'leafgarland/typescript-vim'
+"Plug 'tpope/vim-leiningen'
+"Plug 'tpope/vim-classpath'
+"Plug 'tpope/vim-fireplace'
+"Plug 'tpope/vim-dispatch'
+"Plug 'guns/vim-clojure-static'
+"Plug 'guns/vim-clojure-highlight'
+"Plug 'vim-scripts/paredit.vim'
+"
+Plug 'bling/vim-airline'
+"Plug 'bling/vim-bufferline'
+"Plug 'int3/vim-taglist-plus'
+"Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/nerdtree'
+Plug 'mhinz/vim-startify'
+"Plug 'Raimondi/delimitMate'
+"Plug 'ntpeters/vim-better-whitespace'
+"Plug 'freitass/todo.txt-vim'
+"Plug 'kshenoy/vim-signature'
+"Plug 'tpope/vim-repeat'
+"Plug 'tpope/vim-surround'
+"
+"Plug 'derekwyatt/vim-scala'
+"Plug 'dscleaver/sbt-quickfix'
+"Plug 'solarnz/thrift.vim'
+"
+"Plug 'pangloss/vim-javascript'
+"Plug 'leafgarland/typescript-vim'
 
 "cemetery
-"Plugin 'mileszs/ack.vim'
-"Plugin 'jimenezrick/vimerl'
-"Plugin 'Shougo/neosnippet'
-"Plugin 'kien/ctrlp.vim'
-"Plugin 'Lokaltog/vim-easymotion'
-"Plugin 'neilagabriel/vim-geeknote'
-"Plugin 'YankRing.vim'
-"Plugin 'ReplaceWithRegister'
-"Plugin 'perl-support.vim'
+"Plug 'Gundo'
+"Plug 'vcscommand.vim'
+"Plug 'mileszs/ack.vim'
+"Plug 'jimenezrick/vimerl'
+"Plug 'Shougo/neosnippet'
+"Plug 'kien/ctrlp.vim'
+"Plug 'Lokaltog/vim-easymotion'
+"Plug 'neilagabriel/vim-geeknote'
+"Plug 'YankRing.vim'
+"Plug 'ReplaceWithRegister'
+"Plug 'perl-support.vim'
 
 "coloschemes
-Plugin 'larssmit/vim-getafe'
-if has('nvim')
-Plugin 'frankier/neovim-colors-solarized-truecolor-only'
-else
-Plugin 'altercation/vim-colors-solarized'
-endif
-Plugin 'tomasr/molokai'
-Plugin 'jonathanfilip/vim-lucius'
-Plugin 'djjcast/mirodark'
-Plugin 'bcat/abbott.vim'
-Plugin 'sjl/badwolf'
-Plugin 'baycomb'
-Plugin 'morhetz/gruvbox'
+"Plug 'larssmit/vim-getafe'
+"if has('nvim')
+"Plug 'frankier/neovim-colors-solarized-truecolor-only'
+"else
+"Plug 'altercation/vim-colors-solarized'
+"endif
+Plug 'tomasr/molokai'
+"Plug 'jonathanfilip/vim-lucius'
+"Plug 'djjcast/mirodark'
+"Plug 'bcat/abbott.vim'
+"Plug 'sjl/badwolf'
+"Plug 'morhetz/gruvbox'
+"
+Plug 'neoclide/coc.nvim'
+Plug 'towolf/vim-helm'
 
-Plugin 'neoclide/coc.nvim'
-
-
-call vundle#end()
+call plug#end()
 
 filetype plugin indent on
 syntax on
+
 
 "------------------------------------------------------------------------
 "  syntastic
@@ -175,53 +177,6 @@ let delimitMate_expand_cr = 1
 "------------------------------------------------------------------------
 
 map <tab> :NERDTreeToggle<CR>
-
-"------------------------------------------------------------------------
-"  Unite
-"------------------------------------------------------------------------
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-
-let g:unite_data_directory='~/.unite_cache'
-"let g:unite_enable_start_insert=1
-let g:unite_source_history_yank_enable=1
-
-if executable('ag')
-    let g:unite_source_grep_command='ag'
-    let g:unite_source_grep_default_opts='--nocolor --nogroup -S -C4'
-    let g:unite_source_grep_recursive_opt=''
-elseif executable('ack')
-    let g:unite_source_grep_command='ack'
-    let g:unite_source_grep_default_opts='--no-heading --no-color -k'
-    let g:unite_source_grep_recursive_opt=''
-endif
-
-"nmap <space> [unite]
-nmap , [unite]
-nnoremap [unite] <nop>
-
-nnoremap <silent> <C-t> :<C-u>Unite -toggle -auto-resize -buffer-name=files -start-insert file_rec/async<cr>
-nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line -start-insert line<cr>
-nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers -quick-match buffer<cr>
-"nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=buffers -quick-match file_mru<cr>
-nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-
-"------------------------------------------------------------------------
-"  Neocomplete
-"------------------------------------------------------------------------
-let g:neocomplete#enable_at_startup = 1
-
-let g:neocomplete#force_overwrite_completefunc = 1
-
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-let g:EclimCompletionMethod = "omnifunc"
-
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.java = '\k\.\k*'
-let g:neocomplete#force_omni_input_patterns.scala = '\k\.\k*'
 
 "------------------------------------------------------------------------
 "  Colors & Appearance
