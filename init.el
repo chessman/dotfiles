@@ -1,4 +1,4 @@
-
+;;; init.el --- Initialization File -*- no-byte-compile: t; lexical-binding: nil; -*-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Init use-package
 
@@ -6,6 +6,10 @@
 (setq straight-use-package-by-default t)
 (setq straight-host-usernames '((github . "chessman")))
 (setq straight-vc-git-force-protocol t)
+
+ ; https://emacs-lsp.github.io/lsp-mode/page/performance/
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -21,6 +25,12 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
+
+;; (use-package benchmark-init
+;;   :ensure t
+;;   :config
+;;   ;; To disable collection of benchmark data after init is done.
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Striping & Defaults
@@ -102,31 +112,53 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
 
-(use-package molokai-theme)
-(use-package badwolf-theme)
+;; (use-package badwolf-theme
+;;   :custom-face
+;;   (font-lock-variable-use-face ((t (:inherit default))))
+;;   (font-lock-function-call-face ((t (:inherit default))))
+;;   (font-lock-property-use-face ((t (:inherit default)))))
+
 (use-package gruvbox-theme)
 
-(load-theme 'badwolf t)
+(use-package catppuccin-theme)
 
-;(use-package solarized-theme
-;  :init
-;  (progn
-;    (setq solarized-distinct-fringe-background nil))
-;  :config
-;  (load-theme 'solarized-dark t))
+;(load-theme 'catppuccin :no-confirm)
+;(load-theme 'badwolf t)
+
+(setq modus-themes-italic-constructs t
+      modus-themes-bold-constructs t)
+
+(load-theme 'modus-vivendi-tritanopia :no-confirm)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org
 
-(use-package org
- :init
-   (setq org-startup-indented t)
-   (setq org-startup-folded t)
-   (setq org-src-fontify-natively t)
- :config
- (setq org-preview-latex-default-process 'dvisvgm))
+;; use built-in org
+(require 'org)
+(setq org-startup-indented t
+      org-startup-folded t
+      org-src-fontify-natively t
+      org-default-notes-file (concat org-directory "/runes.org")
+      org-preview-latex-default-process 'dvisvgm
+
+      org-format-latex-options '(:foreground default :background Transparent :scale 0.5
+		:html-foreground "Black" :html-background "Transparent"
+		:html-scale 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\["))
+      org-capture-templates `(
+        ("p" "Protocol" entry (file+headline ,(concat org-directory "/runes.org") "Papers")
+         "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "/runes.org") "Papers")
+         "* %?TODO [[%:link][%:description]] \nCaptured On: %U")))
+
+(add-hook 'org-mode-hook (lambda ()
+                           (auto-fill-mode)
+                           (local-set-key (kbd "<tab>") 'org-cycle)))
 
 (use-package anki-editor)
+
+;; org-protocol allows to capture from the browser
+(server-start)
+(require 'org-protocol)
 
 ;(use-package org-evil)
 
@@ -134,6 +166,7 @@
 ;(use-package evil-org)
 
 (use-package org-pomodoro
+  :defer t
   :config
   (setq alert-default-style 'notifications
         org-pomodoro-audio-player (executable-find "cvlc")
@@ -165,7 +198,11 @@
 ;;   (sml/setup))
 
 (use-package doom-modeline
-  :init (doom-modeline-mode 1))
+  :init
+  (setq doom-modeline-modal nil)
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-buffer-file-name-style 'file-name-with-project)
+  (doom-modeline-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Evil
@@ -190,7 +227,7 @@
     (kill-buffer "*Messages*")))
 
 (use-package evil-collection
-  :after evil
+  :after (evil magit forge)
   :config
   (evil-collection-init '(xref vterm magit edebug dired)))
 
@@ -238,7 +275,7 @@
 
 (use-package helm-ag
   :config
-  (setq helm-ag-base-command "rg --no-heading --sort path --smart-case")
+  (setq helm-ag-base-command "rg --no-heading --sort path --smart-case --hidden --glob=!.git")
   (evil-define-key 'normal helm-ag-mode-map
     (kbd "RET") 'helm-ag-mode-jump-other-window
     "gr" 'helm-ag--update-save-results)
@@ -324,6 +361,15 @@
   :after treemacs magit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dired
+
+(use-package dired+
+  :config
+  (setq global-auto-revert-non-file-buffers t)
+  (global-auto-revert-mode 1))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Octave
 
 (use-package octave
@@ -336,17 +382,23 @@
   :config (which-key-mode))
 
 (use-package lsp-mode
-  :commands lsp
+  :commands (lsp lsp-deferred)
   :init
   (setq lsp-terraform-server '("terraform-ls" "serve"))
   (setq lsp-keymap-prefix "C-l")
-  ; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-format-buffer-on-save t)
+  (setq lsp-go-use-gofumpt nil)
+  (setq lsp-go-analyses '((ST1003 . t)))
+  ;(setq lsp-format-buffer-on-save-list '())
   :hook
-  (scala-mode . lsp)
-  (clojure-mode . lsp)
-  (python-mode . lsp)
+  (scala-mode . lsp-deferred)
+  (scala-ts-mode . lsp-deferred)
+  (typescript-ts-mode . lsp-deferred)
+  (tsx-ts-mode . lsp-deferred)
+  (clojure-mode . lsp-deferred)
+  (json-ts-mode . lsp-deferred)
+  (java-ts-mode . lsp-deferred)
+  (go-ts-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map global-map
@@ -359,11 +411,14 @@
   (setq lsp-restart 'ignore)
   (setq lsp-lens-enable t)
   (evil-leader/set-key
+    "gi" 'lsp-ui-peek-find-implementation
+    "gr" 'lsp-ui-peek-find-references
     "ss" 'helm-lsp-workspace-symbol
     "te" 'lsp-treemacs-errors-list
     "ts" 'lsp-treemacs-symbols))
 
 (use-package lsp-ui
+  :commands lsp-ui-mode
   :config
   (setq lsp-ui-doc-position 'top)
   (setq lsp-ui-sideline-diagnostic-max-lines 10)
@@ -371,14 +426,16 @@
   (setq lsp-ui-doc-alignment 'window))
 
 (use-package lsp-metals
+  :after lsp-mode
   :config
-  ;(setq lsp-metals-java-home "/usr/lib/jvm/java-11-openjdk-amd64/")
-  (setq lsp-metals-server-args '("-Xmx1G" "-XX:+UseG1GC" "-XX:+UseStringDeduplication"))
+  (setq lsp-metals-server-args '("-J-Xmx1G" "-J-XX:+UseStringDeduplication"))
+  (setq lsp-metals-fallback-scala-version "3.3.3")
   (setq lsp-metals-show-implicit-arguments nil)
   (setq lsp-metals-show-inferred-type nil))
 
-(use-package helm-lsp)
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 (use-package lsp-treemacs
+  :commands lsp-treemacs-errors-list
   :config
   (lsp-treemacs-sync-mode 1))
 
@@ -399,21 +456,36 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
 
-(use-package go-mode)
-(add-hook 'go-mode-hook #'lsp)
+;; (use-package go-mode)
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Java
 
 (use-package lsp-java
-  :after lsp
-  :config (add-hook 'java-mode-hook 'lsp))
+  :after lsp-mode)
+(add-to-list 'auto-mode-alist '("\\.java\\'" . java-ts-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Python
+
+(use-package lsp-pyright
+  :defer t
+  :hook (python-ts-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scala
 
 (use-package scala-mode
   :mode ("\\.\\(scala\\|sbt\\|worksheet\\.sc\\|sc\\)\\'" . scala-mode))
+
+(use-package scala-ts-mode
+  :config
+  (setq treesit-font-lock-level 4))
 
 ;(add-hook 'scala-mode-hook (lambda ()
 ;                             (setq prettify-symbols-alist scala-prettify-symbols-alist)
@@ -442,21 +514,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Javascript
 
-(use-package json-mode)
-
-(use-package elm-mode)
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Magit
 
 (use-package magit
-  :config (evil-leader/set-key
+  :config
+  (setq magit-prefer-remote-upstream t)
+  (evil-leader/set-key
     "g f" 'magit-file-dispatch
     "g s" 'magit-status
     "g l" 'magit-log-buffer-file
     "g d" 'magit-diff-buffer-file))
 
-(use-package forge)
+(use-package forge
+  :after magit)
+
+(use-package magit-delta)
 
 (setq-default ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq-default ediff-prefer-iconified-control-frame t)
@@ -609,6 +686,7 @@
   (add-to-list 'sp-sexp-suffix (list 'go-mode 'regexp ""))
   (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
   (add-hook 'scala-mode-hook 'smartparens-strict-mode)
+  (add-hook 'scala-ts-mode-hook 'smartparens-strict-mode)
   (add-hook 'js2-mode-hook 'smartparens-strict-mode)
   (add-hook 'go-mode-hook 'smartparens-strict-mode)
   (evil-define-key 'normal evil-smartparens-mode-map
@@ -713,10 +791,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Restclient
 
-(use-package jq-mode)
+;; (use-package jq-mode)
 
-(use-package restclient
-  :straight `(restclient :type git :host github :files ("restclient.el" "restclient-jq.el" "restclient-helm.el") :repo "pashky/restclient.el"))
+;; (use-package restclient
+;;   :straight `(restclient :type git :host github :files ("restclient.el" "restclient-jq.el" "restclient-helm.el") :repo "pashky/restclient.el"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Multitran
@@ -760,7 +838,7 @@
 (defun normal-state-and-save ()
   (interactive)
   (evil-force-normal-state)
-  (save-buffer))
+  (save-some-buffers t))
 
 (defun ergodox-keys ()
   ; Ergodox
@@ -788,6 +866,46 @@
   :config
   ;(dirvish-override-dired-mode)
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Tree-sitter
+
+(use-package treesit :straight (:type built-in))
+
+(use-package evil-textobj-tree-sitter
+  :config
+  ;; bind `function.outer`(entire function block) to `f` for use in things like `vaf`, `yaf`
+(define-key evil-outer-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.outer"))
+;; bind `function.inner`(function block without name and args) to `f` for use in things like `vif`, `yif`
+(define-key evil-inner-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.inner"))
+
+;; You can also bind multiple items and we will match the first one we can find
+(define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj ("conditional.outer" "loop.outer"))))
+
+;; Goto start of next function
+(define-key evil-normal-state-map
+            (kbd "]f")
+            (lambda ()
+              (interactive)
+              (evil-textobj-tree-sitter-goto-textobj "function.outer")))
+
+;; Goto start of previous function
+(define-key evil-normal-state-map
+            (kbd "[f")
+            (lambda ()
+              (interactive)
+              (evil-textobj-tree-sitter-goto-textobj "function.outer" t)))
+
+;; Goto next block
+(define-key evil-normal-state-map
+            (kbd "]]")
+            (lambda ()
+              (interactive)
+              (evil-textobj-tree-sitter-goto-textobj '("conditional.outer" "loop.outer"))))
+
+(setq major-mode-remap-alist
+ '((scala-mode . scala-ts-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
 
