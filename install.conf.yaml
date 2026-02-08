@@ -6,32 +6,7 @@
 - clean: ['~']
 
 - link:
-    ~/.Xresources: Xresources
-    ~/.inputrc: inputrc
-    ~/.emacs.d/init.el: init.el
-    ~/.vimrc: vimrc
-    ~/.config/nvim/init.vim: init.vim
-    ~/.config/i3/config: i3.conf
-    ~/.config/sway/config: sway.conf
-    ~/.config/i3status/config: i3status.conf
     ~/bin/update-go-tools: update-go-tools
     ~/.config/fish/config.fish: config.fish
-    ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/kitty/kitty.conf: kitty.conf
-#    ~/.SpaceVim.d/init.toml: SpaceVim.d/init.toml
     ~/.config/starship.toml: starship.toml
-    ~/bin/screenlock: screenlock
-
-- create:
-  - ~/.config/i3/lock-images
-
-- shell:
-  - curl -fsSL https://starship.rs/install.sh | env BIN_DIR=$HOME/bin FORCE=y sh
-  - curl -L https://github.com/tigrawap/slit/releases/latest/download/slit_linux_amd64 -o ~/bin/slit
-  - chmod a+x ~/bin/slit
-#  - curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz --output - | tar zxf - -C /tmp/
-#  - mv /tmp/btm ~/bin
-#  - mv /tmp/completion/btm.fish ~/.config/fish/completions/
-#  - rm -rf /tmp/completion
-  - curl -L https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-linux-amd64 -o ~/bin/kind
-  - chmod a+x ~/bin/kind
