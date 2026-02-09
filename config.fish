@@ -9,7 +9,7 @@ set -gx PATH ~/.krew/bin $PATH
 set -gx PATH ~/.cargo/bin $PATH
 set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 
-set -gx PAGER /usr/bin/ov
+set -gx PAGER ov
 
 set -gx RIPGREP_CONFIG_PATH ~/.dotfiles/ripgreprc
 
