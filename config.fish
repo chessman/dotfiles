@@ -16,7 +16,7 @@ set -gx RIPGREP_CONFIG_PATH ~/.dotfiles/ripgreprc
 starship init fish | source
 zoxide init fish | source
 
-alias ls exa
+alias ls eza
 alias fd fdfind
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(brew shellenv)"
