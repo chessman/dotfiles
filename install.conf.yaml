@@ -10,3 +10,4 @@
     ~/.config/fish/config.fish: config.fish
     ~/.config/kitty/kitty.conf: kitty.conf
     ~/.config/starship.toml: starship.toml
+    ~/.doom.d: doom
