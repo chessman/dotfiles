@@ -7,6 +7,7 @@ set -gx PATH ~/.local/bin $PATH
 set -gx PATH ~/go/bin $PATH
 set -gx PATH ~/.krew/bin $PATH
 set -gx PATH ~/.cargo/bin $PATH
+set -gx PATH ~/.emacs.d/bin $PATH
 set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 
 set -gx PAGER ov
@@ -17,6 +18,6 @@ starship init fish | source
 zoxide init fish | source
 
 alias ls eza
-alias fd fdfind
+#alias fd fdfind
 
 eval "$(brew shellenv)"
