@@ -10,6 +10,10 @@ set -gx PATH ~/.cargo/bin $PATH
 set -gx PATH ~/.emacs.d/bin $PATH
 set -gx NODE_PATH ~/node/lib/node_modules $NODE_PATH
 
+if test -d /home/linuxbrew/.linuxbrew/bin/
+    fish_add_path /home/linuxbrew/.linuxbrew/bin/
+end
+
 set -gx PAGER ov
 
 set -gx RIPGREP_CONFIG_PATH ~/.dotfiles/ripgreprc
